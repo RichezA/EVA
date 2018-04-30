@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Prototype.LanguagePage">
+
+    <ScrollView>
+        <ListView x:Name="LanSelect" HasUnevenRows="True">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell x:Name="ViewCell">
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout Padding="0,10"
+                                         VerticalOptions="Center">
+                                <Image Source="{Binding ImageUrl}"
+                                       HeightRequest="100"
+                                       WidthRequest="100"
+                                       Margin="10,0,5,0"/>
+                            </StackLayout>
+                            <StackLayout HorizontalOptions="StartAndExpand"
+                                         VerticalOptions="Center">
+                                <Label Text="{Binding Name}"
+                                       FontAttributes="Bold"
+                                       FontSize="24"/>
+                            </StackLayout>
+                            <StackLayout Padding="0,10"
+                                         VerticalOptions="Center">
+                                <Button x:Name="SelectButton"
+                                        Margin="0,0,10,0"
+                                        BackgroundColor="{StaticResource ButtonColor}"
+                                        TextColor="{StaticResource ButtonText}"
+                                        Clicked="SelectButton_Clicked"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ScrollView>
+</ContentPage>

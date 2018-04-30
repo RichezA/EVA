@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Prototype"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+             x:Class="Prototype.MainPage"
+             >
+    <ScrollView>
+        <StackLayout>
+            <StackLayout VerticalOptions="Start"
+                     Margin="0, 40, 0, 0">
+                <Label HorizontalOptions="Center"
+                   Text="BATTLE"
+                   FontSize="48"/>
+                <Label HorizontalOptions="Center"
+                   Text="OF"
+                   FontSize="48"/>
+                <Label HorizontalOptions="Center"
+                   Text="CODES"
+                   FontSize="48"/>
+                <!--<ffimageloading:CachedImage x:Name="Image"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"
+                                            Source="http://meteorshower.king-hosting.fr/Test3Mini.png"
+                                            DownsampleToViewSize="true"
+                                            Aspect="AspectFill"
+                                            HeightRequest="150"
+                                            WidthRequest="150">
+                </ffimageloading:CachedImage>-->
+            </StackLayout>
+            <StackLayout VerticalOptions="Center"
+                    Margin="20">
+                <Entry x:Name="LogEntry"
+                    Keyboard="Email"/>
+                <Entry x:Name="PasswordEntry"
+                    IsPassword="True"/>
+                <Button x:Name="LoginButton"
+                    Margin="0, 20, 0, 0"
+                    Clicked="LoginButton_Clicked"
+                    BackgroundColor="{StaticResource ButtonColor}"
+                    TextColor="{StaticResource ButtonText}"/>
+                <Button x:Name="BOCSiteBtn"
+                        Margin="30,20,30,0"
+                        Clicked="BOCSiteBtn_Clicked"
+                        BackgroundColor="{StaticResource ButtonColor}"
+                        TextColor="{StaticResource ButtonText}"/>
+                <Button x:Name="LanSelector"
+                        Margin="70,20,70,0"
+                        Clicked="LanSelector_Clicked"
+                        BackgroundColor="{StaticResource ButtonColor}"
+                        TextColor="{StaticResource ButtonText}"/>
+
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
+
