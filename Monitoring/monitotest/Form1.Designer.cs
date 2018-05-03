@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -69,6 +70,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.label1.Location = new System.Drawing.Point(52, 42);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(137, 25);
@@ -80,6 +82,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.label2.Location = new System.Drawing.Point(50, 83);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(137, 25);
@@ -90,6 +93,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.label3.Location = new System.Drawing.Point(52, 125);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(137, 25);
@@ -101,6 +105,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.label4.Location = new System.Drawing.Point(50, 171);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(137, 25);
@@ -109,6 +114,7 @@
             // 
             // textBox1
             // 
+            this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textBox1.Location = new System.Drawing.Point(208, 46);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(445, 20);
@@ -117,6 +123,7 @@
             // 
             // textBox2
             // 
+            this.textBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textBox2.Location = new System.Drawing.Point(659, 46);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(445, 20);
@@ -125,6 +132,7 @@
             // 
             // textBox3
             // 
+            this.textBox3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textBox3.Location = new System.Drawing.Point(208, 88);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(445, 20);
@@ -132,6 +140,7 @@
             // 
             // textBox4
             // 
+            this.textBox4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textBox4.Location = new System.Drawing.Point(659, 89);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(445, 20);
@@ -139,6 +148,7 @@
             // 
             // textBox5
             // 
+            this.textBox5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textBox5.Location = new System.Drawing.Point(208, 131);
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(445, 20);
@@ -146,6 +156,7 @@
             // 
             // textBox6
             // 
+            this.textBox6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textBox6.Location = new System.Drawing.Point(659, 131);
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(445, 20);
@@ -153,6 +164,7 @@
             // 
             // textBox7
             // 
+            this.textBox7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textBox7.Location = new System.Drawing.Point(208, 176);
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(445, 20);
@@ -160,6 +172,7 @@
             // 
             // textBox8
             // 
+            this.textBox8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textBox8.Location = new System.Drawing.Point(659, 177);
             this.textBox8.Name = "textBox8";
             this.textBox8.Size = new System.Drawing.Size(445, 20);
@@ -167,6 +180,7 @@
             // 
             // textBox9
             // 
+            this.textBox9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.textBox9.Location = new System.Drawing.Point(55, 222);
             this.textBox9.Multiline = true;
             this.textBox9.Name = "textBox9";
@@ -179,7 +193,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1182, 603);
+            this.AutoScroll = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.BackColor = System.Drawing.SystemColors.WindowFrame;
+            this.ClientSize = new System.Drawing.Size(1264, 681);
             this.Controls.Add(this.textBox9);
             this.Controls.Add(this.textBox8);
             this.Controls.Add(this.textBox7);
@@ -195,6 +212,10 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(1920, 1080);
+            this.MinimumSize = new System.Drawing.Size(1280, 720);
             this.Name = "Form1";
             this.Text = "Environment Voting Application";
             this.Load += new System.EventHandler(this.Form1_Load);

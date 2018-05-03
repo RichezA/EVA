@@ -20,9 +20,9 @@ namespace monitotest
         public TcpClient client;
         private TcpListener tcpListener;
         private Thread listenThread;
-
-        StreamWriter sw = new StreamWriter(@"C:\Users\riche\Desktop\Log.txt"); // Get the file where the log will be written
-        
+        int cpt = 0;
+        string log = @"C:\Users\Antoine\Desktop\log";
+        int actualyear = DateTime.Now.Year;
         public Form1()
         {
             InitializeComponent();
@@ -30,12 +30,34 @@ namespace monitotest
 
         private void button2_Click(object sender, EventArgs e)
         {
-            sw.WriteLine(textBox9.Text); // Copy the text in the log file when "Stop" button is pressed
-            sw.Close(); // Close the file
-            sw.Dispose(); // Release the memory used by the StreamWriter
-            client.Close(); // Stop the local server
-            this.Close();
-            MessageBox.Show("Local Server Closed");
+            try
+            {
+                if (actualyear != DateTime.Now.Year)
+                {
+                    if (!File.Exists(log + ".txt"))
+                    {
+                        FileStream fs = File.Create(log + ".txt");
+                        fs.Close();
+                    }
+                    while (File.Exists(log + ".txt"))
+                    {
+                        cpt++;
+                        log = log + cpt.ToString();
+                    }
+                }
+               
+                StreamWriter sw = new StreamWriter(log + ".txt"); // Get the file where the log wi
+                sw.WriteLine(textBox9.Text); // Copy the text in the log file when "Stop" button is pressed
+                sw.Close(); // Close the file
+                sw.Dispose(); // Release the memory used by the StreamWriter
+                client.Close(); // Stop the local server
+                this.Close();
+                
+            } catch (NullReferenceException) 
+            {
+                MessageBox.Show("Local Server Closed");
+            }
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -46,22 +68,27 @@ namespace monitotest
             listenThread = new Thread(new ThreadStart(ListenForClients));
             listenThread.Start();
 
-
-
             void ListenForClients()
             {
-                this.tcpListener.Start();
-                this.SetText("Sucessfully started", this.textBox9);
-                while (true)
+                try
                 {
-                    //blocks until a client has connected to the server
-                    TcpClient client = this.tcpListener.AcceptTcpClient();
+                    this.tcpListener.Start();
+                    this.SetText("Sucessfully started", this.textBox9);
+                    while (true)
+                    {
+                        //blocks until a client has connected to the server
+                        TcpClient client = this.tcpListener.AcceptTcpClient();
 
-                    //create a thread to handle communication 
-                    //with connected client
-                    Thread clientThread = new Thread(new ParameterizedThreadStart(HandleClientComm));
-                    clientThread.Start(client);
+                        //create a thread to handle communication 
+                        //with connected client
+                        Thread clientThread = new Thread(new ParameterizedThreadStart(HandleClientComm));
+                        clientThread.Start(client);
+                        
+                    }
+
                 }
+                catch (SocketException) { }
+
             }
             void HandleClientComm(object client)
             {
@@ -70,8 +97,8 @@ namespace monitotest
                 NetworkStream clientStream = tcpClient.GetStream();
 
                 ASCIIEncoding encoder = new ASCIIEncoding();
-                byte[] buffer = encoder.GetBytes("Hello Client!");
-                clientStream.Write(buffer, 0, buffer.Length);
+                //byte[] buffer = encoder.GetBytes("Hello Client!");
+                //clientStream.Write(buffer, 0, buffer.Length);
                 clientStream.Flush();
 
                 byte[] message = new byte[4096];
@@ -148,6 +175,7 @@ namespace monitotest
             }
 
         }
+        #region Useless atm
         private void Form1_Load(object sender,EventArgs e)
         {
 
@@ -173,5 +201,6 @@ namespace monitotest
         {
 
         }
+        #endregion
     }
 }
