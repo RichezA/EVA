@@ -8,3 +8,13 @@ C:\Users\Antoine\Desktop\Battle of Codes 2018\AppBoc\Monitoring\monitotest\obj\D
 C:\Users\Antoine\Desktop\Battle of Codes 2018\AppBoc\Monitoring\monitotest\obj\Debug\monitotest.csproj.CoreCompileInputs.cache
 C:\Users\Antoine\Desktop\Battle of Codes 2018\AppBoc\Monitoring\monitotest\obj\Debug\monitotest.exe
 C:\Users\Antoine\Desktop\Battle of Codes 2018\AppBoc\Monitoring\monitotest\obj\Debug\monitotest.pdb
+C:\Users\remyv\source\repos\AppBoc\Monitoring\monitotest\bin\Debug\monitotest.exe.config
+C:\Users\remyv\source\repos\AppBoc\Monitoring\monitotest\bin\Debug\monitotest.exe
+C:\Users\remyv\source\repos\AppBoc\Monitoring\monitotest\bin\Debug\monitotest.pdb
+C:\Users\remyv\source\repos\AppBoc\Monitoring\monitotest\obj\Debug\monitotest.csprojResolveAssemblyReference.cache
+C:\Users\remyv\source\repos\AppBoc\Monitoring\monitotest\obj\Debug\monitotest.Form1.resources
+C:\Users\remyv\source\repos\AppBoc\Monitoring\monitotest\obj\Debug\monitotest.Properties.Resources.resources
+C:\Users\remyv\source\repos\AppBoc\Monitoring\monitotest\obj\Debug\monitotest.csproj.GenerateResource.cache
+C:\Users\remyv\source\repos\AppBoc\Monitoring\monitotest\obj\Debug\monitotest.csproj.CoreCompileInputs.cache
+C:\Users\remyv\source\repos\AppBoc\Monitoring\monitotest\obj\Debug\monitotest.exe
+C:\Users\remyv\source\repos\AppBoc\Monitoring\monitotest\obj\Debug\monitotest.pdb

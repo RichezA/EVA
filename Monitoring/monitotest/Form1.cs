@@ -21,8 +21,9 @@ namespace monitotest
         private TcpListener tcpListener;
         private Thread listenThread;
         int cpt = 0;
-        string log = @"C:\Users\Antoine\Desktop\log";
+        string log = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\EVA";
         int actualyear = DateTime.Now.Year;
+
         public Form1()
         {
             InitializeComponent();
@@ -39,21 +40,21 @@ namespace monitotest
                         FileStream fs = File.Create(log + ".txt");
                         fs.Close();
                     }
-                    while (File.Exists(log + ".txt"))
+                    while(File.Exists(log + ".txt"))
                     {
                         cpt++;
                         log = log + cpt.ToString();
                     }
                 }
                
-                StreamWriter sw = new StreamWriter(log + ".txt"); // Get the file where the log wi
+                StreamWriter sw = new StreamWriter(log + actualyear + ".txt"); // Get the file where the log wi
                 sw.WriteLine(textBox9.Text); // Copy the text in the log file when "Stop" button is pressed
                 sw.Close(); // Close the file
                 sw.Dispose(); // Release the memory used by the StreamWriter
                 client.Close(); // Stop the local server
                 this.Close();
-                
-            } catch (NullReferenceException) 
+            }
+            catch (NullReferenceException) 
             {
                 MessageBox.Show("Local Server Closed");
             }
@@ -124,6 +125,10 @@ namespace monitotest
                         //the client has disconnected from the server
                         break;
                     }
+                    if(encoder.GetString(message, 0, bytesRead) == "CHECKVOTE")
+                    {
+                        clientStream.Write(encoder.GetBytes("VOTEOK"), 0, encoder.GetBytes("VOTEOK").Length);
+                    }
                     this.TreatText(encoder.GetString(message,0,bytesRead));
                     //File.WriteAllText("Log.txt", textBox9.Text);
                     
@@ -175,6 +180,7 @@ namespace monitotest
             }
 
         }
+
         #region Useless atm
         private void Form1_Load(object sender,EventArgs e)
         {

@@ -1,8 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-            xmlns:local="clr-namespace:Prototype"
+             xmlns:local="clr-namespace:Prototype"
              x:Class="Prototype.AfterLogin">
     <!--<local:GamePage Title="Jeux"/>
     <local:AppliPage Title="Applications"/>-->
-</TabbedPage>
+    <StackLayout>
+            <Label HorizontalOptions="Center"
+                   Text="IP-SERVEUR"
+                   FontSize="Default"/>
+            <Entry x:Name="AdressEntry"/>
+            <Label HorizontalOptions="Center"
+                   Text="ANNEE"
+                   FontSize="Default"/>
+            <Entry x:Name="YearEntry"/>
+            <!--<Label HorizontalOptions="Center"
+                   Text="CODES"
+                   FontSize="Default"/>
+            <Entry x:Name="LogEntry"
+                   Text=""/>-->
+            <Button x:Name="SubmitButton"
+                    Text="Submit"
+                    Margin="0, 20, 0, 0"
+                    Clicked="SubmitButton_Clicked"
+                    BackgroundColor="{StaticResource ButtonColor}"
+                    TextColor="{StaticResource ButtonText}"/>
+        </StackLayout>
+</ContentPage>

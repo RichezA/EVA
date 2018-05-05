@@ -117,7 +117,8 @@ namespace Prototype
         {
             Button button = (Button)sender;
             Group group = button.BindingContext as Group;
-            await Navigation.PushAsync(new GroupPage(this.Instance, group.Nom, group.Image, group.Description));
+            Network.SendPacket("PAGE:GROUPPAGE", this.Instance.ipServer);
+            await Navigation.PushAsync(new GroupPage(this.Instance, group));
         }
 
         async private void AppliList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -126,7 +127,8 @@ namespace Prototype
             {
                 Group group = ((ListView)sender).SelectedItem as Group;
                 ((ListView)sender).SelectedItem = null;
-                await Navigation.PushAsync(new GroupPage(this.Instance, group.Nom, group.Image, group.Description));
+                Network.SendPacket("PAGE:GROUPPAGE", this.Instance.ipServer);
+                await Navigation.PushAsync(new GroupPage(this.Instance, group));
             }
         }
     }
