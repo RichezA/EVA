@@ -35,29 +35,30 @@ namespace monitotest
                 if (actualyear != DateTime.Now.Year)
                 {
                     if (!File.Exists(log + ".txt"))
-                {
-                    FileStream fs = File.Create(log + ".txt");
-                    fs.Close();
+                    {
+                        FileStream fs = File.Create(log + ".txt");
+                        fs.Close();
+                    }
+                    while (File.Exists(log + ".txt"))
+                    {
+                        cpt++;
+                        log = log + cpt.ToString();
+                    }
                 }
-                while (File.Exists(log + ".txt"))
-                {
-                    cpt++;
-                    log = log + cpt.ToString();
-                }
-            } 
 
-                 StreamWriter sw = new StreamWriter(log + actualyear + ".txt"); // Get the file where the log wi
-            sw.WriteLine(textBox9.Text); // Copy the text in the log file when "Stop" button is pressed
-            sw.Close(); // Close the file
-            sw.Dispose(); // Release the memory used by the StreamWriter
-            client.Close(); // Stop the local server
+                StreamWriter sw = new StreamWriter(log + actualyear + ".txt"); // Get the file where the log wi
+                sw.WriteLine(textBox9.Text); // Copy the text in the log file when "Stop" button is pressed
+                sw.Close(); // Close the file
+                sw.Dispose(); // Release the memory used by the StreamWriter
+                client.Close(); // Stop the local server
                 this.Close();
 
-            }catch (NullReferenceException)
+            }
+            catch (NullReferenceException)
             {
                 MessageBox.Show("Local Server Closed");
             }
-           
+
 
         }
 
@@ -171,6 +172,7 @@ namespace monitotest
             }
             else
             {
+                // ternary operators : var = [condition] ? [if condition is true] : [if condition is false] ; 
                 var actualText = $"[{DateTime.Now}] : {text}";
                 textbox.Text = textbox == this.textBox9 ? oldText.TrimStart() + Environment.NewLine + actualText : actualText;
             }
