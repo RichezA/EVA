@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Prototype.Services;
 using ZXing.Net.Mobile.Forms;
+using System.Net.Sockets;
 
 namespace Prototype
 {
@@ -18,6 +19,12 @@ namespace Prototype
 	{
         public Language lang = new Language { Short = "fr" };
         public List<Group> groups;
+        public TcpClient client;
+        private TcpListener tcpListener;
+        private Thread listenThread;
+        public bool voteOk = false;
+        public string ipServer = "";
+        public string year = "";
 
         /*static async Task<List<Group>> GetJson()
         {
@@ -43,11 +50,32 @@ namespace Prototype
             BOCSiteBtn.Text = this.lang.GetLanguageResult("BOCSiteBtn");
             LanSelector.Text = this.lang.GetLanguageResult("LanSelector");
             Task.Factory.StartNew(() => this.GetJson());
+            this.tcpListener = new TcpListener(IPAddress.Any, 3000);
+            this.listenThread = new Thread(new ThreadStart(ListenForClients));
+            this.listenThread.Start();
         }
 
         private async void LoginButton_Clicked(object sender, EventArgs e)
         {
-            Scanner();
+            try
+            {
+                Network.SendPacket("CHECKVOTE", this.ipServer);
+            }
+            catch
+            {
+
+            }
+            if (LogEntry.Text == "admin" && PasswordEntry.Text == "casciot")
+            {
+                await Navigation.PushAsync(new AfterLogin(this));
+            }
+            if(this.voteOk == false)
+            {
+                await DisplayAlert("Erreur", "Les votes n'ont pas encore commencé ou sont terminés", "OK");
+            }
+            else {
+                Scanner();
+            }
             /*if (!String.IsNullOrEmpty(LogEntry.Text) && !String.IsNullOrEmpty(PasswordEntry.Text))
             {
                 //if(LogEntry.Text.Contains("@gmail.com") || LogEntry.Text.Contains("@hotmail.com") || LogEntry.Text.Contains("@hotmail.be") || LogEntry.Text.Contains("@outlook.com") || LogEntry.Text.Contains("@outlook.be"))
@@ -76,17 +104,84 @@ namespace Prototype
             var ScannerPage = new ZXingScannerPage();
             ScannerPage.DefaultOverlayTopText = "Scannez votre ticket";
             ScannerPage.OnScanResult += (result) => {
-                // Parar de escanear
+
                 ScannerPage.IsScanning = false;
 
                 Device.BeginInvokeOnMainThread(() => {
                     Navigation.PopAsync();
-                    Network.SendPacket(result.Text + " connected");
+                    Network.SendPacket("CONNEXION:"+result.Text, this.ipServer);
                 });
             };
 
 
             await Navigation.PushAsync(ScannerPage);
+
+        }
+
+        void ListenForClients()
+        {
+            try
+            {
+                this.tcpListener.Start();
+                while (true)
+                {
+                    //blocks until a client has connected to the server
+                    TcpClient client = this.tcpListener.AcceptTcpClient();
+
+                    //create a thread to handle communication 
+                    //with connected client
+                    Thread clientThread = new Thread(new ParameterizedThreadStart(HandleClientComm));
+                    clientThread.Start(client);
+
+                }
+
+            }
+            catch (SocketException) { }
+
+        }
+
+        void HandleClientComm(object client)
+        {
+            TcpClient tcpClient = (TcpClient)client;
+            this.client = tcpClient;
+            NetworkStream clientStream = tcpClient.GetStream();
+
+            ASCIIEncoding encoder = new ASCIIEncoding();
+            clientStream.Flush();
+
+            byte[] message = new byte[4096];
+            int bytesRead;
+
+            while (true)
+            {
+                bytesRead = 0;
+
+                try
+                {
+                    //blocks until a client sends a message
+                    bytesRead = clientStream.Read(message, 0, 4096);
+                }
+                catch
+                {
+                    //a socket error has occured
+                    break;
+                }
+
+                if (bytesRead == 0)
+                {
+                    //the client has disconnected from the server
+                    break;
+                }
+                if (encoder.GetString(message, 0, bytesRead) == "VOTEOK")
+                {
+                    this.voteOk = true;
+                }
+                else
+                {
+                    this.voteOk = false;
+                }
+
+            }
 
         }
 

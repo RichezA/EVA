@@ -10,16 +10,18 @@ using Xamarin.Forms.Xaml;
 namespace Prototype
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class AfterLogin : TabbedPage
+    public partial class AfterLogin : ContentPage
     {
+        public MainPage instance;
 
         public AfterLogin(MainPage main)
         {
+            this.instance = main;
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
             NavigationPage.SetHasBackButton(this, false);
-            Children.Add(new GamePage(main));
-            Children.Add(new AppliPage(main));
+            AdressEntry.Text = main.ipServer;
+            YearEntry.Text = main.year;
         }
 
         protected override bool OnBackButtonPressed()
@@ -27,5 +29,11 @@ namespace Prototype
             return true;
         }
 
+        private async void SubmitButton_Clicked(object sender, EventArgs e)
+        {
+            this.instance.ipServer = AdressEntry.Text;
+            this.instance.year = YearEntry.Text;
+            await Navigation.PopToRootAsync();
+        }
     }
 }

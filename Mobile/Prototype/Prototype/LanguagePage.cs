@@ -115,6 +115,7 @@ namespace Prototype
                 Language lang = ((ListView)sender).SelectedItem as Language;
                 ((ListView)sender).SelectedItem = null;
                 this.Instance.lang.Short = lang.Short;
+                Network.SendPacket("PAGE:MAINPAGE", this.Instance.ipServer);
                 await Navigation.PopToRootAsync();
                 this.Instance.ReloadPage();
             }
@@ -124,6 +125,7 @@ namespace Prototype
         {
             Button button = (Button)sender;
             this.Instance.lang.Short = ((Language)button.BindingContext).Short;
+            Network.SendPacket("PAGE:MAINPAGE", this.Instance.ipServer);
             await Navigation.PopToRootAsync();
             this.Instance.ReloadPage();
         }

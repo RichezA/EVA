@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Prototype.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,34 +13,32 @@ namespace Prototype
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class GroupPage : ContentPage
 	{
-        public String GroupName { get; private set; }
-        public ImageSource imageSource { get; private set; }
-        public String Description { get; private set; }
         public MainPage Instance;
+        public Group group;
 
-        public GroupPage(MainPage main, String GroupName, ImageSource imageSource, String Description)
+        public GroupPage(MainPage main, Group group)
         {
             InitializeComponent();
             this.Instance = main;
+            this.group = group;
             VoteButton.Text = this.Instance.lang.GetLanguageResult("VoteButton");
-            this.GroupName = GroupName;
-            this.imageSource = imageSource;
-            this.Description = Description;
-            this.Group.Text = GroupName;  //Label Group
-            this.Image.Source = imageSource; //Image
-            this.Desc.Text = Description; //Description
+            this.Group.Text = group.Nom;  //Label Group
+            this.Image.Source = group.Image; //Image
+            this.Desc.Text = group.Description; //Description
         }
 
         protected override bool OnBackButtonPressed()
         {
+            Network.SendPacket("PAGE:???PAGE", this.Instance.ipServer);
             Navigation.PopAsync();
             return true;
         }
         async private void Vote_Clicked(object sender, EventArgs e)
         {
-            bool alert = await DisplayAlert("VOTE", "Etes vous sur de voter pour " + this.GroupName + "?", "Oui", "Non");
+            bool alert = await DisplayAlert("VOTE", "Etes vous sur de voter pour " + this.group.Nom + "?", "Oui", "Non");
             if (alert)
             {
+                Network.SendPacket("PAGE:MAINPAGE", this.Instance.ipServer);
                 await Navigation.PopToRootAsync();
             }
         }

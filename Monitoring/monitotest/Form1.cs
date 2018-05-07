@@ -21,8 +21,9 @@ namespace monitotest
         private TcpListener tcpListener;
         private Thread listenThread;
         int cpt = 0;
-        string log = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\EVA";
+        string log = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\EVA";
         int actualyear = DateTime.Now.Year;
+
         public Form1()
         {
             InitializeComponent();
@@ -52,11 +53,11 @@ namespace monitotest
                 sw.Dispose(); // Release the memory used by the StreamWriter
                 client.Close(); // Stop the local server
                 this.Close();
-
             }
+
             catch (NullReferenceException)
             {
-                MessageBox.Show("Local Server Closed");
+
             }
 
 
@@ -126,7 +127,13 @@ namespace monitotest
                         //the client has disconnected from the server
                         break;
                     }
+
                     this.TreatText(encoder.GetString(message, 0, bytesRead));
+
+                    if(encoder.GetString(message, 0, bytesRead) == "CHECKVOTE")
+                    {
+                        clientStream.Write(encoder.GetBytes("VOTEOK"), 0, encoder.GetBytes("VOTEOK").Length);
+                    }
                     //File.WriteAllText("Log.txt", textBox9.Text);
 
                 }
@@ -178,6 +185,7 @@ namespace monitotest
             }
 
         }
+
         #region Useless atm
         private void Form1_Load(object sender, EventArgs e)
         {
