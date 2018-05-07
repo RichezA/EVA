@@ -58,12 +58,13 @@
             // 
             // button2
             // 
+            this.button2.BackColor = System.Drawing.Color.Snow;
             this.button2.Location = new System.Drawing.Point(785, 550);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(170, 41);
             this.button2.TabIndex = 1;
             this.button2.Text = "Stop";
-            this.button2.UseVisualStyleBackColor = true;
+            this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // label1
@@ -181,6 +182,7 @@
             // textBox9
             // 
             this.textBox9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textBox9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.textBox9.Location = new System.Drawing.Point(55, 222);
             this.textBox9.Multiline = true;
             this.textBox9.Name = "textBox9";
@@ -194,6 +196,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
+            this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.WindowFrame;
             this.ClientSize = new System.Drawing.Size(1264, 681);
