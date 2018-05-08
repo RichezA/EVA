@@ -15,8 +15,8 @@ namespace Prototype.Services
         public string Description { get; set; }
         public string Studio { get; set; }
         public string Type { get; set; }
-        public List<string> TypeDeJeux { get; set; }
-        public List<string> ListeDevelopper { get; set; }
+        public string TypeDeJeux { get; set; }
+        public string ListeDevelopper { get; set; }
         public string UrlDownload { get; set; }
         public string UrlImage { get; set; }
         public ImageSource Image

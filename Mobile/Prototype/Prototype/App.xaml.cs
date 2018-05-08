@@ -21,14 +21,14 @@ namespace Prototype
         protected override void OnStart()
         {
             // Handle when your app starts
-            try
+            /*try
             {
                 Network.SendPacket("PAGE:MAINPAGE", instance.ipServer);
             }
             catch
             {
 
-            }
+            }*/
         }
 
         protected override void OnSleep()

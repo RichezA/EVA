@@ -11,6 +11,7 @@ using System.Net;
 using System.Threading;
 using System.Net.Sockets;
 using System.IO;
+using monitotest.Services;
 
 namespace monitotest
 {
@@ -23,6 +24,7 @@ namespace monitotest
         int cpt = 0;
         string log = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\EVA";
         int actualyear = DateTime.Now.Year;
+        Dictionary<string, List<string>> votes;
 
         public Form1()
         {
@@ -33,6 +35,7 @@ namespace monitotest
         {
             try
             {
+                Network.SendPacket("VOTEOFF", IPAddress.Any.ToString());
                 if (actualyear != DateTime.Now.Year)
                 {
                     if (!File.Exists(log + ".txt"))
@@ -65,6 +68,11 @@ namespace monitotest
 
         private void button1_Click(object sender, EventArgs e)
         {
+            this.votes = new Dictionary<string, List<string>>()
+            {
+                    {"Game", new List<string>()},
+                    {"App", new List<string>()}
+            };
             MessageBox.Show("Monitoring started successfully");
             this.SetText("Starting...", this.textBox9); // method "SetText" is executed on the worker thread => thread-safe call on the textBox9
             tcpListener = new TcpListener(IPAddress.Any, 3000);
@@ -102,7 +110,7 @@ namespace monitotest
                 ASCIIEncoding encoder = new ASCIIEncoding();
                 //byte[] buffer = encoder.GetBytes("Hello Client!");
                 //clientStream.Write(buffer, 0, buffer.Length);
-                clientStream.Flush();
+                //clientStream.Flush();
 
                 byte[] message = new byte[4096];
                 int bytesRead;
@@ -127,13 +135,17 @@ namespace monitotest
                         //the client has disconnected from the server
                         break;
                     }
-
-                    this.TreatText(encoder.GetString(message, 0, bytesRead));
-
-                    if(encoder.GetString(message, 0, bytesRead) == "CHECKVOTE")
+                    if (encoder.GetString(message, 0, bytesRead) == "CHECKVOTE")
                     {
                         clientStream.Write(encoder.GetBytes("VOTEOK"), 0, encoder.GetBytes("VOTEOK").Length);
+                        clientStream.Flush();
                     }
+                    else
+                    {
+                        this.TreatText(encoder.GetString(message, 0, bytesRead));
+                    }
+
+                    
                     //File.WriteAllText("Log.txt", textBox9.Text);
 
                 }
@@ -145,23 +157,27 @@ namespace monitotest
         private void TreatText(string message)
         {
             var split = message.Split(':');
+            if(split[0] == "CHECKVOTE"){
+                Network.SendPacket("VOTEOK", split[1]);
+            }
             if (split[0] == "PAGE")
             {
-                this.SetText(split[1], this.textBox2);
-
+                this.SetText(split[2], this.textBox2);
             }
             else if (split[0] == "CONNEXION")
             {
-                this.SetText(split[1], this.textBox1);
-                this.SetText(split[1] + " s'est connecté", this.textBox9);
+                this.SetText(split[2], this.textBox1);
+                this.SetText(split[2] + " s'est connecté", this.textBox9);
             }
             else if (split[0] == "VOTEAPP")
             {
-                this.SetText(split[1] + " a voté pour une application", textBox9);
+                this.SetText(split[2] + " a voté pour une application", textBox9);
+                this.votes["App"].Add(split[2]);
             }
             else if (split[0] == "VOTEGAME")
             {
-                this.SetText(split[1] + " a voté pour un jeu", textBox9);
+                this.SetText(split[2] + " a voté pour un jeu", textBox9);
+                this.votes["Game"].Add(split[2]);
             }
         }
 

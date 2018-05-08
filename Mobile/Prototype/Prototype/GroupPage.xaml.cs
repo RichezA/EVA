@@ -39,6 +39,14 @@ namespace Prototype
             if (alert)
             {
                 Network.SendPacket("PAGE:MAINPAGE", this.Instance.ipServer);
+                if (this.group.Type == "Application")
+                {
+                    Network.SendPacket("VOTEAPP:"+this.group.Studio, this.Instance.ipServer);
+                }
+                else
+                {
+                    Network.SendPacket("VOTEGAME:"+this.group.Studio, this.Instance.ipServer);
+                }
                 await Navigation.PopToRootAsync();
             }
         }

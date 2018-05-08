@@ -1,12 +1,14 @@
 ﻿using System;
-using System.Text;
-using System.Net.Sockets;
-using System.Threading;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Prototype.Services
+namespace monitotest.Services
 {
-    public static class Network
+    class Network
     {
         public static async void SendPacket(String Message, String Ip)
         {
@@ -20,5 +22,6 @@ namespace Prototype.Services
             clientStream.Write(buffer, 0, buffer.Length);
             clientStream.Flush();
         }
+    
     }
 }
