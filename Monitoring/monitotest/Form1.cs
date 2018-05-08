@@ -16,6 +16,7 @@ namespace monitotest
 {
     public partial class Form1 : Form
     {
+        public Thread serverThread;
         delegate void StringArgReturningVoidDelegate(string text, TextBox textbox); // Delegate enable asynchronous call for setting txt property on the textBox9
         public TcpClient client;
         private TcpListener tcpListener;
@@ -47,17 +48,20 @@ namespace monitotest
                     }
                 }
 
+                button1.Enabled = true;
+                button2.Enabled = false;
                 StreamWriter sw = new StreamWriter(log + actualyear + ".txt"); // Get the file where the log wi
                 sw.WriteLine(textBox9.Text); // Copy the text in the log file when "Stop" button is pressed
                 sw.Close(); // Close the file
                 sw.Dispose(); // Release the memory used by the StreamWriter
                 client.Close(); // Stop the local server
                 this.Close();
+                
             }
 
             catch (NullReferenceException)
             {
-
+                MessageBox.Show("Server closed","Server closed");
             }
 
 
@@ -65,7 +69,15 @@ namespace monitotest
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Monitoring started successfully");
+
+            //if(this.serverThread == null)
+            //{
+            //    this.serverThread = new Thread(new ThreadStart());
+            //    this.serverThread.Start();
+            //}
+            button1.Enabled = false;
+            button2.Enabled = true;
+            MessageBox.Show("Server is starting","Monitoring started successfully");
             this.SetText("Starting...", this.textBox9); // method "SetText" is executed on the worker thread => thread-safe call on the textBox9
             tcpListener = new TcpListener(IPAddress.Any, 3000);
             listenThread = new Thread(new ThreadStart(ListenForClients));
