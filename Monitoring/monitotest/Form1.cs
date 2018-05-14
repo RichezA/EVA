@@ -190,14 +190,29 @@ namespace monitotest
                 this.SetText(split[2], this.textBox1);
                 this.SetText(split[2] + " s'est connecté", this.textBox9);
             }
-            else if (split[0] == "VOTEAPP")
+            else if (split[0] == "VOTE1")
             {
-                this.SetText(split[2] + " a voté pour une application", textBox9);
+                this.SetText(split[2] + " a voté pour le prix 1", textBox9);
                 this.votes["App"].Add(split[3]);
             }
-            else if (split[0] == "VOTEGAME")
+            else if (split[0] == "VOTE2")
             {
-                this.SetText(split[2] + " a voté pour un jeu", textBox9);
+                this.SetText(split[2] + " a voté pour le prix 2", textBox9);
+                this.votes["Game"].Add(split[3]);
+            }
+            else if (split[0] == "VOTE3")
+            {
+                this.SetText(split[2] + " a voté pour le prix 3", textBox9);
+                this.votes["App"].Add(split[3]);
+            }
+            else if (split[0] == "VOTE4")
+            {
+                this.SetText(split[2] + " a voté pour le prix 4", textBox9);
+                this.votes["Game"].Add(split[3]);
+            }
+            else if (split[0] == "VOTE5")
+            {
+                this.SetText(split[2] + " a voté pour le prix 5", textBox9);
                 this.votes["Game"].Add(split[3]);
             }
         }
