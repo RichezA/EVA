@@ -3,12 +3,13 @@ using System.Text;
 using System.Net.Sockets;
 using System.Threading;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Prototype.Services
 {
     public static class Network
     {
-        public static async void SendPacket(String Message, String Ip)
+        public static async Task SendPacket(String Message, String Ip)
         {
             TcpClient client = new TcpClient();
             //IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("10.11.1.94"), 3000);

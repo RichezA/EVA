@@ -21,41 +21,43 @@ namespace monitotest
         public TcpClient client;
         private TcpListener tcpListener;
         private Thread listenThread;
+        List<string> adress = new List<string>();
         int cpt = 0;
-        string log = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\EVA";
+        string path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\EVA";
         int actualyear = DateTime.Now.Year;
         Dictionary<string, List<string>> votes;
 
         public Form1()
         {
             InitializeComponent();
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             try
             {
-                Network.SendPacket("VOTEOFF", IPAddress.Any.ToString());
-                if (actualyear != DateTime.Now.Year)
+                foreach (string element in this.adress)
                 {
-                    if (!File.Exists(log + ".txt"))
-                    {
-                        FileStream fs = File.Create(log + ".txt");
-                        fs.Close();
-                    }
-                    while (File.Exists(log + ".txt"))
-                    {
-                        cpt++;
-                        log = log + cpt.ToString();
-                    }
+                    Network.SendPacket("VOTEOFF", element);
+                }
+                if (!File.Exists(path + "\\" + actualyear + "log.txt"))
+                {
+                    FileStream fs = File.Create(path + "\\" + actualyear + "log.txt");
+                    fs.Close();
+                    fs.Dispose();
                 }
 
-                StreamWriter sw = new StreamWriter(log + actualyear + ".txt"); // Get the file where the log wi
+                StreamWriter sw = new StreamWriter(path + "\\" + actualyear + "log.txt"); // Get the file where the log wi
                 sw.WriteLine(textBox9.Text); // Copy the text in the log file when "Stop" button is pressed
                 sw.Close(); // Close the file
                 sw.Dispose(); // Release the memory used by the StreamWriter
                 client.Close(); // Stop the local server
-                this.Close();
+                this.CollectVote();
+                //this.Close();
             }
 
             catch (NullReferenceException)
@@ -64,6 +66,23 @@ namespace monitotest
             }
 
 
+        }
+
+        private void CollectVote()
+        {
+            foreach(var element in this.votes)
+            {
+                if (!File.Exists(path + "\\" + actualyear + element.Key+".txt"))
+                {
+                    FileStream fs = File.Create(path + "\\" + actualyear + element.Key + ".txt");
+                    fs.Close();
+                    fs.Dispose();
+                }
+                StreamWriter sw = new StreamWriter(path + "\\" + actualyear + element.Key + ".txt");
+                sw.Write(string.Join(Environment.NewLine, element.Value));
+                sw.Close();
+                sw.Dispose();
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -157,8 +176,10 @@ namespace monitotest
         private void TreatText(string message)
         {
             var split = message.Split(':');
+            if (!this.adress.Contains(split[1])) this.adress.Add(split[1]);
             if(split[0] == "CHECKVOTE"){
                 Network.SendPacket("VOTEOK", split[1]);
+                return;
             }
             if (split[0] == "PAGE")
             {
@@ -172,12 +193,12 @@ namespace monitotest
             else if (split[0] == "VOTEAPP")
             {
                 this.SetText(split[2] + " a voté pour une application", textBox9);
-                this.votes["App"].Add(split[2]);
+                this.votes["App"].Add(split[3]);
             }
             else if (split[0] == "VOTEGAME")
             {
                 this.SetText(split[2] + " a voté pour un jeu", textBox9);
-                this.votes["Game"].Add(split[2]);
+                this.votes["Game"].Add(split[3]);
             }
         }
 

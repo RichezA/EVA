@@ -10,18 +10,18 @@ using Xamarin.Forms.Xaml;
 namespace Prototype
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class AfterLogin : ContentPage
+    public partial class AdminPage : ContentPage
     {
         public MainPage instance;
 
-        public AfterLogin(MainPage main)
+        public AdminPage(MainPage main)
         {
             this.instance = main;
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
             NavigationPage.SetHasBackButton(this, false);
             AdressEntry.Text = main.ipServer;
-            YearEntry.Text = main.year;
+            YearEntry.Text = main.Number;
         }
 
         protected override bool OnBackButtonPressed()
@@ -32,7 +32,7 @@ namespace Prototype
         private async void SubmitButton_Clicked(object sender, EventArgs e)
         {
             this.instance.ipServer = AdressEntry.Text;
-            this.instance.year = YearEntry.Text;
+            this.instance.Number = YearEntry.Text;
             await Navigation.PopToRootAsync();
         }
     }

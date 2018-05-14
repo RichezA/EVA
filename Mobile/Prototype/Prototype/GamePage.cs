@@ -127,7 +127,7 @@ namespace Prototype
         {
             Button button = (Button)sender;
             Group group = button.BindingContext as Group;
-            Network.SendPacket("PAGE:GROUPPAGE", this.Instance.ipServer);
+            await Network.SendPacket("PAGE:" + this.Instance.myIpv4 + ":GROUPPAGE", this.Instance.ipServer);
             await Navigation.PushAsync(new GroupPage(this.Instance, group));
         }
 
@@ -137,7 +137,7 @@ namespace Prototype
             {
                 Group group = ((ListView)sender).SelectedItem as Group;
                 ((ListView)sender).SelectedItem = null;
-                Network.SendPacket("PAGE:GROUPPAGE", this.Instance.ipServer);
+                await Network.SendPacket("PAGE:" + this.Instance.myIpv4 + ":GROUPPAGE", this.Instance.ipServer);
                 await Navigation.PushAsync(new GroupPage(this.Instance, group));
             }
         }

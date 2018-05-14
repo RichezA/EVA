@@ -15,13 +15,39 @@ namespace Prototype
 
         public MainPage Instance;
         public string InfoButtonText;
+        public List<Group> groups;
+        public int Id_Price;
 
-        public AppliPage(MainPage main)
+        public AppliPage(MainPage main, int Id_Price)
         {
             this.Instance = main;
-            this.Title = this.Instance.lang.GetLanguageResult("AppliPageTitle") ;
+            this.Id_Price = Id_Price;
             //InitializeComponent();
-            List<Group> groups = (from g in this.Instance.groups where g.Type == "Application" select g).ToList();
+            switch (Id_Price)
+            {
+                //APP
+                case 1: //Prix meilleur fonctionnalité
+                    this.groups = (from g in this.Instance.copyGroup where g.Type == "Application" select g).ToList();
+                    this.Title = this.Instance.lang.GetLanguageResult("AppliPageTitle1");
+                    break;
+                case 2: //Prix de l'app la plus originale
+                    this.groups = (from g in this.Instance.copyGroup where g.Type == "Application" select g).ToList();
+                    this.Title = this.Instance.lang.GetLanguageResult("AppliPageTitle2");
+                    break;
+                //JEU
+                case 3: //Prix du meilleur gameplay
+                    this.groups = (from g in this.Instance.copyGroup where g.Type == "Jeux" select g).ToList();
+                    this.Title = this.Instance.lang.GetLanguageResult("AppliPageTitle3");
+                    break;
+                case 4: //Prix de la meilleur direction artistique
+                    this.groups = (from g in this.Instance.copyGroup where g.Type == "Jeux" select g).ToList();
+                    this.Title = this.Instance.lang.GetLanguageResult("AppliPageTitle4");
+                    break;
+                case 5: //Prix du meilleur jeu
+                    this.groups = (from g in this.Instance.copyGroup where g.Type == "Jeux" select g).ToList();
+                    this.Title = this.Instance.lang.GetLanguageResult("AppliPageTitle5");
+                    break;
+            }
 
             this.InfoButtonText = this.Instance.lang.GetLanguageResult("InfoButton");
             ListView listView = new ListView
@@ -117,8 +143,8 @@ namespace Prototype
         {
             Button button = (Button)sender;
             Group group = button.BindingContext as Group;
-            Network.SendPacket("PAGE:GROUPPAGE", this.Instance.ipServer);
-            await Navigation.PushAsync(new GroupPage(this.Instance, group));
+            await Network.SendPacket("PAGE:" + this.Instance.myIpv4 + ":GROUPPAGE", this.Instance.ipServer);
+            await Navigation.PushAsync(new GroupPage(this.Instance, group, this.Id_Price));
         }
 
         async private void AppliList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -127,9 +153,14 @@ namespace Prototype
             {
                 Group group = ((ListView)sender).SelectedItem as Group;
                 ((ListView)sender).SelectedItem = null;
-                Network.SendPacket("PAGE:GROUPPAGE", this.Instance.ipServer);
-                await Navigation.PushAsync(new GroupPage(this.Instance, group));
+                await Network.SendPacket("PAGE:" + this.Instance.myIpv4 + ":GROUPPAGE", this.Instance.ipServer);
+                await Navigation.PushAsync(new GroupPage(this.Instance, group, this.Id_Price));
             }
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            return true;
         }
     }
 }

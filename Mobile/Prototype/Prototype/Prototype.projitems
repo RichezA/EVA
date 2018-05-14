@@ -13,8 +13,8 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainPage.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)AfterLogin.xaml.cs">
-      <DependentUpon>AfterLogin.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)AdminPage.xaml.cs">
+      <DependentUpon>AdminPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
@@ -35,7 +35,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Network.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)AfterLogin.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)AdminPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

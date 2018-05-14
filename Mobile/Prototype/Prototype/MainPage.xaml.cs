@@ -25,8 +25,11 @@ namespace Prototype
         private Thread listenThread;
         public bool voteOk = false;
         public IPAddress myIpv4;
-        public string ipServer = "192.168.43.73";
-        public string year = "";
+        public string User;
+        public string ipServer = "192.168.43.171";
+        public string Number = "";
+        public Thread checkingVote;
+        public List<Group> copyGroup;
 
         /*static async Task<List<Group>> GetJson()
         {
@@ -59,21 +62,39 @@ namespace Prototype
             this.tcpListener = new TcpListener(IPAddress.Any, 3000);
             this.listenThread = new Thread(new ThreadStart(ListenForClients));
             this.listenThread.Start();
+            this.checkingVote = new Thread(new ThreadStart(CheckVote));
+            this.checkingVote.Start();
+        }
+        
+        private async void CheckVote()
+        {
+            while (true)
+            {
+                try
+                {
+                    if(this.voteOk == true)
+                    {
+                        this.checkingVote.Abort();
+                        return;
+                    }
+                    await Network.SendPacket("CHECKVOTE:" + this.myIpv4, this.ipServer);
+                }
+                catch (ThreadAbortException)
+                {
+
+                }
+                catch
+                {
+
+                }
+            }
         }
 
         private async void LoginButton_Clicked(object sender, EventArgs e)
         {
-            try
-            {
-                Network.SendPacket("CHECKVOTE:"+this.myIpv4, this.ipServer);
-            }
-            catch
-            {
-
-            }
             if (LogEntry.Text == "admin" && PasswordEntry.Text == "casciot")
             {
-                await Navigation.PushAsync(new AfterLogin(this));
+                await Navigation.PushAsync(new AdminPage(this));
                 return;
             }
             if(this.voteOk == false)
@@ -82,6 +103,7 @@ namespace Prototype
             }
             else {
                 Scanner();
+                this.copyGroup = this.groups;
             }
             /*if (!String.IsNullOrEmpty(LogEntry.Text) && !String.IsNullOrEmpty(PasswordEntry.Text))
             {
@@ -110,13 +132,14 @@ namespace Prototype
 
             var ScannerPage = new ZXingScannerPage();
             ScannerPage.DefaultOverlayTopText = "Scannez votre ticket";
-            Network.SendPacket("PAGE:" + this.myIpv4 + ":SCANNER", this.ipServer);
+            await Network.SendPacket("PAGE:" + this.myIpv4 + ":SCANNER", this.ipServer);
             ScannerPage.OnScanResult += (result) => {
 
                 ScannerPage.IsScanning = false;
 
                 Device.BeginInvokeOnMainThread(() => {
-                    Navigation.PopAsync();
+                    Navigation.PushAsync(new GamePage(this));
+                    this.User = result.Text;
                     Network.SendPacket("CONNEXION:" + this.myIpv4+ ":" +result.Text, this.ipServer);
                 });
             };
@@ -189,6 +212,7 @@ namespace Prototype
                 {
                     this.voteOk = false;
                     clientStream.Flush();
+                    //this.checkingVote.Start();
                 }
 
             }
@@ -198,7 +222,7 @@ namespace Prototype
         async private void LanSelector_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new LanguagePage(this));
-            Network.SendPacket("PAGE:" + this.myIpv4 + ":LANGUAGEPAGE", this.ipServer);
+            await Network.SendPacket("PAGE:" + this.myIpv4 + ":LANGUAGEPAGE", this.ipServer);
 
         }
 

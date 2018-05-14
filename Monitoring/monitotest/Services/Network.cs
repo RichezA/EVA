@@ -14,13 +14,21 @@ namespace monitotest.Services
         {
             TcpClient client = new TcpClient();
             //IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("10.11.1.94"), 3000);
-            await client.ConnectAsync(IPAddress.Parse(Ip), 3000);
+            try
+            {
+                await client.ConnectAsync(IPAddress.Parse(Ip), 3000);
+                NetworkStream clientStream = client.GetStream();
+                ASCIIEncoding encoder = new ASCIIEncoding();
+                byte[] buffer = encoder.GetBytes(Message);
+                clientStream.Write(buffer, 0, buffer.Length);
+                clientStream.Flush();
+            }
+            catch
+            {
 
-            NetworkStream clientStream = client.GetStream();
-            ASCIIEncoding encoder = new ASCIIEncoding();
-            byte[] buffer = encoder.GetBytes(Message);
-            clientStream.Write(buffer, 0, buffer.Length);
-            clientStream.Flush();
+            }
+
+            
         }
     
     }
