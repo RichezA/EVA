@@ -89,8 +89,11 @@ namespace monitotest
         {
             this.votes = new Dictionary<string, List<string>>()
             {
-                    {"Game", new List<string>()},
-                    {"App", new List<string>()}
+                    {"Prix1", new List<string>()},
+                    {"Prix2", new List<string>()},
+                    {"Prix3", new List<string>()},
+                    {"Prix4", new List<string>()},
+                    {"Prix5", new List<string>()}
             };
             MessageBox.Show("Monitoring started successfully");
             this.SetText("Starting...", this.textBox9); // method "SetText" is executed on the worker thread => thread-safe call on the textBox9
@@ -193,27 +196,27 @@ namespace monitotest
             else if (split[0] == "VOTE1")
             {
                 this.SetText(split[2] + " a voté pour le prix 1", textBox9);
-                this.votes["App"].Add(split[3]);
+                this.votes["Prix1"].Add(split[3]);
             }
             else if (split[0] == "VOTE2")
             {
                 this.SetText(split[2] + " a voté pour le prix 2", textBox9);
-                this.votes["Game"].Add(split[3]);
+                this.votes["Prix2"].Add(split[3]);
             }
             else if (split[0] == "VOTE3")
             {
                 this.SetText(split[2] + " a voté pour le prix 3", textBox9);
-                this.votes["App"].Add(split[3]);
+                this.votes["Prix3"].Add(split[3]);
             }
             else if (split[0] == "VOTE4")
             {
                 this.SetText(split[2] + " a voté pour le prix 4", textBox9);
-                this.votes["Game"].Add(split[3]);
+                this.votes["Prix4"].Add(split[3]);
             }
             else if (split[0] == "VOTE5")
             {
                 this.SetText(split[2] + " a voté pour le prix 5", textBox9);
-                this.votes["Game"].Add(split[3]);
+                this.votes["Prix5"].Add(split[3]);
             }
         }
 
