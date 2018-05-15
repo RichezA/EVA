@@ -12,6 +12,7 @@ using Xamarin.Forms;
 using Prototype.Services;
 using ZXing.Net.Mobile.Forms;
 using System.Net.Sockets;
+using System.Net.NetworkInformation;
 
 namespace Prototype
 {
@@ -23,8 +24,12 @@ namespace Prototype
         private TcpListener tcpListener;
         private Thread listenThread;
         public bool voteOk = false;
-        public string ipServer = "";
-        public string year = "";
+        public IPAddress myIpv4;
+        public string User;
+        public string ipServer = "192.168.43.171";
+        public string Number = "";
+        public Thread checkingVote;
+        public List<Group> copyGroup;
 
         /*static async Task<List<Group>> GetJson()
         {
@@ -42,7 +47,11 @@ namespace Prototype
 
         public MainPage()
 		{
-			InitializeComponent();
+            IPAddress[] ipv4Addresses = Array.FindAll(
+                Dns.GetHostEntry(string.Empty).AddressList,
+                a => a.AddressFamily == AddressFamily.InterNetwork);
+            this.myIpv4 = ipv4Addresses[0].MapToIPv4();
+            InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
             LoginButton.Text = this.lang.GetLanguageResult("LoginButton");
             LogEntry.Placeholder = this.lang.GetLanguageResult("LogEntry");
@@ -53,21 +62,40 @@ namespace Prototype
             this.tcpListener = new TcpListener(IPAddress.Any, 3000);
             this.listenThread = new Thread(new ThreadStart(ListenForClients));
             this.listenThread.Start();
+            this.checkingVote = new Thread(new ThreadStart(CheckVote));
+            this.checkingVote.Start();
+        }
+        
+        private async void CheckVote()
+        {
+            while (true)
+            {
+                try
+                {
+                    if(this.voteOk == true)
+                    {
+                        this.checkingVote.Abort();
+                        return;
+                    }
+                    await Network.SendPacket("CHECKVOTE:" + this.myIpv4, this.ipServer);
+                }
+                catch (ThreadAbortException)
+                {
+
+                }
+                catch
+                {
+
+                }
+            }
         }
 
         private async void LoginButton_Clicked(object sender, EventArgs e)
         {
-            try
-            {
-                Network.SendPacket("CHECKVOTE", this.ipServer);
-            }
-            catch
-            {
-
-            }
             if (LogEntry.Text == "admin" && PasswordEntry.Text == "casciot")
             {
-                await Navigation.PushAsync(new AfterLogin(this));
+                await Navigation.PushAsync(new AdminPage(this));
+                return;
             }
             if(this.voteOk == false)
             {
@@ -75,6 +103,7 @@ namespace Prototype
             }
             else {
                 Scanner();
+                this.copyGroup = this.groups;
             }
             /*if (!String.IsNullOrEmpty(LogEntry.Text) && !String.IsNullOrEmpty(PasswordEntry.Text))
             {
@@ -103,13 +132,15 @@ namespace Prototype
 
             var ScannerPage = new ZXingScannerPage();
             ScannerPage.DefaultOverlayTopText = "Scannez votre ticket";
+            await Network.SendPacket("PAGE:" + this.myIpv4 + ":SCANNER", this.ipServer);
             ScannerPage.OnScanResult += (result) => {
 
                 ScannerPage.IsScanning = false;
 
                 Device.BeginInvokeOnMainThread(() => {
-                    Navigation.PopAsync();
-                    Network.SendPacket("CONNEXION:"+result.Text, this.ipServer);
+                    Navigation.PushAsync(new GamePage(this));
+                    this.User = result.Text;
+                    Network.SendPacket("CONNEXION:" + this.myIpv4+ ":" +result.Text, this.ipServer);
                 });
             };
 
@@ -118,7 +149,7 @@ namespace Prototype
 
         }
 
-        void ListenForClients()
+        public void ListenForClients()
         {
             try
             {
@@ -140,14 +171,14 @@ namespace Prototype
 
         }
 
-        void HandleClientComm(object client)
+        public void HandleClientComm(object client)
         {
             TcpClient tcpClient = (TcpClient)client;
             this.client = tcpClient;
             NetworkStream clientStream = tcpClient.GetStream();
 
             ASCIIEncoding encoder = new ASCIIEncoding();
-            clientStream.Flush();
+            //clientStream.Flush();
 
             byte[] message = new byte[4096];
             int bytesRead;
@@ -175,10 +206,13 @@ namespace Prototype
                 if (encoder.GetString(message, 0, bytesRead) == "VOTEOK")
                 {
                     this.voteOk = true;
+                    clientStream.Flush();
                 }
-                else
+                if(encoder.GetString(message, 0, bytesRead) == "VOTEOFF")
                 {
                     this.voteOk = false;
+                    clientStream.Flush();
+                    //this.checkingVote.Start();
                 }
 
             }
@@ -188,6 +222,8 @@ namespace Prototype
         async private void LanSelector_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new LanguagePage(this));
+            await Network.SendPacket("PAGE:" + this.myIpv4 + ":LANGUAGEPAGE", this.ipServer);
+
         }
 
         private void BOCSiteBtn_Clicked(object sender, EventArgs e)

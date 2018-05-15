@@ -77,16 +77,17 @@ namespace monitotest
 
         private void CollectVote()
         {
-            foreach (var element in this.votes)
+            foreach(var element in this.votes)
             {
-                if (!File.Exists(path + "\\" + actualyear + element.Key + ".txt"))
+                if (!File.Exists(path + "\\" + actualyear + element.Key+".txt"))
+
                 {
                     FileStream fs = File.Create(path + "\\" + actualyear + element.Key + ".txt");
                     fs.Close();
                     fs.Dispose();
                 }
                 StreamWriter sw = new StreamWriter(path + "\\" + actualyear + element.Key + ".txt");
-                string[] teamVotes = new string[2] { "Meteor", "Bloodmoon" };
+                string[] teamVotes = new string[3] { "Meteor", "Bloodmoon","Infamy Studio" };
                 for (int i = 0; i < teamVotes.Length; i++)
                 {
                     foreach(var grpVotes in element.Value[i])
@@ -96,6 +97,7 @@ namespace monitotest
                     sw.Write(String.Join(Environment.NewLine, $"{teamVotes[i]} : {increment}"));
                     increment = 0;
                 }
+                
 
                 //switch (element.Value.ToString())
                 //{
@@ -196,8 +198,6 @@ namespace monitotest
                     {
                         this.TreatText(encoder.GetString(message, 0, bytesRead));
                     }
-
-
                     //File.WriteAllText("Log.txt", textBox9.Text);
 
                 }
