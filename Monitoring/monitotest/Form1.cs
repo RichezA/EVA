@@ -11,73 +11,121 @@ using System.Net;
 using System.Threading;
 using System.Net.Sockets;
 using System.IO;
+using monitotest.Services;
 
 namespace monitotest
 {
     public partial class Form1 : Form
     {
-        public Thread serverThread;
         delegate void StringArgReturningVoidDelegate(string text, TextBox textbox); // Delegate enable asynchronous call for setting txt property on the textBox9
         public TcpClient client;
         private TcpListener tcpListener;
         private Thread listenThread;
+        List<string> adress = new List<string>();
         int cpt = 0;
-        string log = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\EVA";
+        string path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\EVA";
         int actualyear = DateTime.Now.Year;
+        Dictionary<string, List<string>> votes;
+
+        #region testvariables
+        int meteorVotes = 0;
+        int bloodmoonVotes = 0;
+        int infamyVotes = 0;
+        int increment = 0;
+        #endregion
 
         public Form1()
         {
             InitializeComponent();
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             try
             {
-                if (actualyear != DateTime.Now.Year)
+                foreach (string element in this.adress)
                 {
-                    if (!File.Exists(log + ".txt"))
-                    {
-                        FileStream fs = File.Create(log + ".txt");
-                        fs.Close();
-                    }
-                    while (File.Exists(log + ".txt"))
-                    {
-                        cpt++;
-                        log = log + cpt.ToString();
-                    }
+                    Network.SendPacket("VOTEOFF", element);
+                }
+                if (!File.Exists(path + "\\" + actualyear + "log.txt"))
+                {
+                    FileStream fs = File.Create(path + "\\" + actualyear + "log.txt");
+                    fs.Close();
+                    fs.Dispose();
                 }
 
-                button1.Enabled = true;
-                button2.Enabled = false;
-                StreamWriter sw = new StreamWriter(log + actualyear + ".txt"); // Get the file where the log wi
+                StreamWriter sw = new StreamWriter(path + "\\" + actualyear + "log.txt"); // Get the file where the log wi
                 sw.WriteLine(textBox9.Text); // Copy the text in the log file when "Stop" button is pressed
                 sw.Close(); // Close the file
                 sw.Dispose(); // Release the memory used by the StreamWriter
                 client.Close(); // Stop the local server
-                this.Close();
-                
+                this.CollectVote();
+                //this.Close();
             }
 
             catch (NullReferenceException)
             {
-                MessageBox.Show("Server closed","Server closed");
+
             }
 
 
         }
 
+        private void CollectVote()
+        {
+            foreach (var element in this.votes)
+            {
+                if (!File.Exists(path + "\\" + actualyear + element.Key + ".txt"))
+                {
+                    FileStream fs = File.Create(path + "\\" + actualyear + element.Key + ".txt");
+                    fs.Close();
+                    fs.Dispose();
+                }
+                StreamWriter sw = new StreamWriter(path + "\\" + actualyear + element.Key + ".txt");
+                string[] teamVotes = new string[2] { "Meteor", "Bloodmoon" };
+                for (int i = 0; i < teamVotes.Length; i++)
+                {
+                    foreach(var grpVotes in element.Value[i])
+                    {
+                        increment = (grpVotes.ToString() == teamVotes[i]) ? increment++ : increment += 0;
+                    }
+                    sw.Write(String.Join(Environment.NewLine, $"{teamVotes[i]} : {increment}"));
+                    increment = 0;
+                }
+
+                //switch (element.Value.ToString())
+                //{
+                //    case "Meteor":
+                //        increment = element.Value.Exists(x => x == "Meteor") ? increment++ : increment += 0;
+                //        sw.Write(String.Join(Environment.NewLine, "Meteor : " + increment));
+                //        break;
+                //    case "BloodMoon":
+                //        increment = 0;
+                //        increment = element.Value.Exists(x => x == "BloodMoon") ? increment++ : increment += 0;
+                //        sw.Write(String.Join(Environment.NewLine, "BloodMoon : " + increment));
+                //        break;
+                //}
+                sw.Write(string.Join(Environment.NewLine, element.Value));
+                sw.Close();
+                sw.Dispose();
+            }
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
-
-            //if(this.serverThread == null)
-            //{
-            //    this.serverThread = new Thread(new ThreadStart());
-            //    this.serverThread.Start();
-            //}
-            button1.Enabled = false;
-            button2.Enabled = true;
-            MessageBox.Show("Server is starting","Monitoring started successfully");
+            this.votes = new Dictionary<string, List<string>>()
+            {
+                    {"Prix1", new List<string>()},
+                    {"Prix2", new List<string>()},
+                    {"Prix3", new List<string>()},
+                    {"Prix4", new List<string>()},
+                    {"Prix5", new List<string>()}
+            };
+            MessageBox.Show("Monitoring started successfully");
             this.SetText("Starting...", this.textBox9); // method "SetText" is executed on the worker thread => thread-safe call on the textBox9
             tcpListener = new TcpListener(IPAddress.Any, 3000);
             listenThread = new Thread(new ThreadStart(ListenForClients));
@@ -114,7 +162,7 @@ namespace monitotest
                 ASCIIEncoding encoder = new ASCIIEncoding();
                 //byte[] buffer = encoder.GetBytes("Hello Client!");
                 //clientStream.Write(buffer, 0, buffer.Length);
-                clientStream.Flush();
+                //clientStream.Flush();
 
                 byte[] message = new byte[4096];
                 int bytesRead;
@@ -139,13 +187,17 @@ namespace monitotest
                         //the client has disconnected from the server
                         break;
                     }
-
-                    this.TreatText(encoder.GetString(message, 0, bytesRead));
-
-                    if(encoder.GetString(message, 0, bytesRead) == "CHECKVOTE")
+                    if (encoder.GetString(message, 0, bytesRead) == "CHECKVOTE")
                     {
                         clientStream.Write(encoder.GetBytes("VOTEOK"), 0, encoder.GetBytes("VOTEOK").Length);
+                        clientStream.Flush();
                     }
+                    else
+                    {
+                        this.TreatText(encoder.GetString(message, 0, bytesRead));
+                    }
+
+
                     //File.WriteAllText("Log.txt", textBox9.Text);
 
                 }
@@ -157,23 +209,40 @@ namespace monitotest
         private void TreatText(string message)
         {
             var split = message.Split(':');
-            if (split[0] == "PAGE")
+            if (!this.adress.Contains(split[1])) this.adress.Add(split[1]);
+            //var increment = this.votes.Exists(x => x == split[3]) ? increment++ : increment += 0;
+            switch (split[0])
             {
-                this.SetText(split[1], this.textBox2);
-
-            }
-            else if (split[0] == "CONNEXION")
-            {
-                this.SetText(split[1], this.textBox1);
-                this.SetText(split[1] + " s'est connecté", this.textBox9);
-            }
-            else if (split[0] == "VOTEAPP")
-            {
-                this.SetText(split[1] + " a voté pour une application", textBox9);
-            }
-            else if (split[0] == "VOTEGAME")
-            {
-                this.SetText(split[1] + " a voté pour un jeu", textBox9);
+                case "CHECKVOTE":
+                    Network.SendPacket("VOTEOK", split[1]);
+                    break;
+                case "PAGE":
+                    this.SetText(split[2], this.textBox2);
+                    break;
+                case "CONNEXION":
+                    this.SetText(split[2], this.textBox1);
+                    this.SetText(split[2] + " s'est connecté", this.textBox9);
+                    break;
+                case "VOTE1":
+                    this.SetText(split[2] + " a voté pour le prix 1", textBox9);
+                    this.votes["Prix1"].Add(split[3]);
+                    break;
+                case "VOTE2":
+                    this.SetText(split[2] + " a voté pour le prix 2", textBox9);
+                    this.votes["Prix2"].Add(split[3]);
+                    break;
+                case "VOTE3":
+                    this.SetText(split[2] + " a voté pour le prix 3", textBox9);
+                    this.votes["Prix3"].Add(split[3]);
+                    break;
+                case "VOTE4":
+                    this.SetText(split[2] + " a voté pour le prix 4", textBox9);
+                    this.votes["Prix4"].Add(split[3]);
+                    break;
+                case "VOTE5":
+                    this.SetText(split[2] + " a voté pour le prix 5", textBox9);
+                    this.votes["Prix5"].Add(split[3]);
+                    break;
             }
         }
 
