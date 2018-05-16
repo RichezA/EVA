@@ -87,15 +87,36 @@ namespace monitotest
                     fs.Dispose();
                 }
                 StreamWriter sw = new StreamWriter(path + "\\" + actualyear + element.Key + ".txt");
-                string[] teamVotes = new string[3] { "Meteor", "Bloodmoon","Infamy Studio" };
-                for (int i = 0; i < teamVotes.Length; i++)
+                //string[] teamVotes = new string[3] { "Meteor", "Bloodmoon","Infamy Studio" };
+                //for (int i = 0; i < teamVotes.Length; i++)
+                //{
+                //    foreach(var grpVotes in element.Value[i])
+                //    {
+                //        increment = (grpVotes.ToString() == teamVotes[i]) ? increment++ : increment += 0;
+                //    }
+                //    sw.Write(String.Join(Environment.NewLine, $"{teamVotes[i]} : {increment}"));
+                //    increment = 0;
+                //}
+
+                Dictionary<string, int> votes = new Dictionary<string, int>();
+                foreach (string item in element.Value)
                 {
-                    foreach(var grpVotes in element.Value[i])
+                    if (!votes.ContainsKey(item))
                     {
-                        increment = (grpVotes.ToString() == teamVotes[i]) ? increment++ : increment += 0;
+                        votes.Add(item, 1);
                     }
-                    sw.Write(String.Join(Environment.NewLine, $"{teamVotes[i]} : {increment}"));
-                    increment = 0;
+                    else
+                    {
+                        int count = 0;
+                        votes.TryGetValue(item, out count);
+                        votes.Remove(item);
+                        votes.Add(item, count + 1);
+                    }
+                }
+
+                foreach(KeyValuePair<string, int> entry in votes)
+                {
+                    sw.WriteLine(entry.Key + ": " + entry.Value);
                 }
                 
 
@@ -111,7 +132,7 @@ namespace monitotest
                 //        sw.Write(String.Join(Environment.NewLine, "BloodMoon : " + increment));
                 //        break;
                 //}
-                sw.Write(string.Join(Environment.NewLine, element.Value));
+                //sw.Write(string.Join(Environment.NewLine, element.Value));
                 sw.Close();
                 sw.Dispose();
             }
@@ -217,11 +238,39 @@ namespace monitotest
                     Network.SendPacket("VOTEOK", split[1]);
                     break;
                 case "PAGE":
-                    this.SetText(split[2], this.textBox2);
+                    switch (split[1])
+                    {
+                        case "1":
+                            this.SetText(split[3], this.textBox2);
+                            break;
+                        case "2":
+                            this.SetText(split[3], this.textBox4);
+                            break;
+                        case "3":
+                            this.SetText(split[3], this.textBox6);
+                            break;
+                        case "4":
+                            this.SetText(split[3], this.textBox8);
+                            break;
+                    }
                     break;
                 case "CONNEXION":
-                    this.SetText(split[2], this.textBox1);
-                    this.SetText(split[2] + " s'est connecté", this.textBox9);
+                    switch (split[1])
+                    {
+                        case "1":
+                            this.SetText(split[3], this.textBox1);
+                            break;
+                        case "2":
+                            this.SetText(split[3], this.textBox3);
+                            break;
+                        case "3":
+                            this.SetText(split[3], this.textBox5);
+                            break;
+                        case "4":
+                            this.SetText(split[3], this.textBox7);
+                            break;
+                    }
+                    this.SetText(split[3] + " s'est connecté", this.textBox9);
                     break;
                 case "VOTE1":
                     this.SetText(split[2] + " a voté pour le prix 1", textBox9);

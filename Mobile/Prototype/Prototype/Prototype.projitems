@@ -20,7 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)AppliPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ListPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Group.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GamePage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GroupPage.xaml.cs">

@@ -40,6 +40,7 @@ namespace Prototype
         private async void GetJson()
         {
             HttpClient client = new HttpClient(new NativeMessageHandler());
+            //var json = await client.GetStringAsync(new Uri("https://s3-eu-west-1.amazonaws.com/battleofcodes.prj/ave.json"));
             var json = await client.GetStringAsync(new Uri("http://www.battleofcodes.com/ave/appsobjects/getallobj/ave.json"));
             //var json = await client.GetStringAsync(new Uri("http://meteorshower.king-hosting.fr/ave.json"));
             this.groups = JsonConvert.DeserializeObject<List<Group>>(json.ToString());
@@ -95,6 +96,8 @@ namespace Prototype
             if (LogEntry.Text == "admin" && PasswordEntry.Text == "casciot")
             {
                 await Navigation.PushAsync(new AdminPage(this));
+                LogEntry.Placeholder = this.lang.GetLanguageResult("LogEntry");
+                PasswordEntry.Placeholder = this.lang.GetLanguageResult("PasswordEntry");
                 return;
             }
             if(this.voteOk == false)
@@ -103,7 +106,9 @@ namespace Prototype
             }
             else {
                 Scanner();
-                this.copyGroup = this.groups;
+                //this.groups.CopyTo(this.copyGroup);
+
+                this.copyGroup = new List<Group>(this.groups); //BETTER COPY
             }
             /*if (!String.IsNullOrEmpty(LogEntry.Text) && !String.IsNullOrEmpty(PasswordEntry.Text))
             {
@@ -132,15 +137,15 @@ namespace Prototype
 
             var ScannerPage = new ZXingScannerPage();
             ScannerPage.DefaultOverlayTopText = "Scannez votre ticket";
-            await Network.SendPacket("PAGE:" + this.myIpv4 + ":SCANNER", this.ipServer);
+            await Network.SendPacket("PAGE:" + this.Number + ":" + this.myIpv4 + ":SCANNER", this.ipServer);
             ScannerPage.OnScanResult += (result) => {
 
                 ScannerPage.IsScanning = false;
 
                 Device.BeginInvokeOnMainThread(() => {
-                    Navigation.PushAsync(new GamePage(this));
+                    Navigation.PushAsync(new ListPage(this, 1));
                     this.User = result.Text;
-                    Network.SendPacket("CONNEXION:" + this.myIpv4+ ":" +result.Text, this.ipServer);
+                    Network.SendPacket("CONNEXION:" + this.Number +":" + this.myIpv4+ ":" +result.Text, this.ipServer);
                 });
             };
 
@@ -222,7 +227,7 @@ namespace Prototype
         async private void LanSelector_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new LanguagePage(this));
-            await Network.SendPacket("PAGE:" + this.myIpv4 + ":LANGUAGEPAGE", this.ipServer);
+            await Network.SendPacket("PAGE:" + this.Number + ":" + this.myIpv4 + ":LANGUAGEPAGE", this.ipServer);
 
         }
 

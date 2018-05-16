@@ -23,7 +23,7 @@ namespace Prototype
             // Handle when your app starts
             try
             {
-                Network.SendPacket("PAGE:" + instance.myIpv4 +":MAINPAGE", instance.ipServer);
+                Network.SendPacket("PAGE:" + instance.Number + ":" + instance.myIpv4 +":MAINPAGE", instance.ipServer);
             }
             catch
             {
@@ -36,7 +36,7 @@ namespace Prototype
             // Handle when your app sleeps
             try
             {
-                Network.SendPacket("PAGE:" + instance.myIpv4 + ":ERROR/QUIT", instance.ipServer);
+                Network.SendPacket("PAGE:" + instance.Number + ":" + instance.myIpv4 + ":ERROR/QUIT", instance.ipServer);
             }
             catch
             {
@@ -50,7 +50,7 @@ namespace Prototype
             // Handle when your app resumes
             try
             {
-                Network.SendPacket("PAGE:" + instance.myIpv4 + ":ERROR/QUIT", instance.ipServer);
+                Network.SendPacket("PAGE:" + instance.Number + ":" + instance.myIpv4 + ":ERROR/QUIT", instance.ipServer);
             }
             catch
             {

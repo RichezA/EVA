@@ -10,7 +10,7 @@ using Xamarin.Forms.Xaml;
 namespace Prototype
 {
 
-    public partial class AppliPage : ContentPage
+    public partial class ListPage : ContentPage
     {
 
         public MainPage Instance;
@@ -18,7 +18,7 @@ namespace Prototype
         public List<Group> groups;
         public int Id_Price;
 
-        public AppliPage(MainPage main, int Id_Price)
+        public ListPage(MainPage main, int Id_Price)
         {
             this.Instance = main;
             this.Id_Price = Id_Price;
@@ -143,7 +143,7 @@ namespace Prototype
         {
             Button button = (Button)sender;
             Group group = button.BindingContext as Group;
-            await Network.SendPacket("PAGE:" + this.Instance.myIpv4 + ":GROUPPAGE", this.Instance.ipServer);
+            await Network.SendPacket("PAGE:" + this.Instance.Number + ":" + this.Instance.myIpv4 + ":GROUPPAGE", this.Instance.ipServer);
             await Navigation.PushAsync(new GroupPage(this.Instance, group, this.Id_Price));
         }
 
@@ -153,7 +153,7 @@ namespace Prototype
             {
                 Group group = ((ListView)sender).SelectedItem as Group;
                 ((ListView)sender).SelectedItem = null;
-                await Network.SendPacket("PAGE:" + this.Instance.myIpv4 + ":GROUPPAGE", this.Instance.ipServer);
+                await Network.SendPacket("PAGE:" + this.Instance.Number + ":" + this.Instance.myIpv4 + ":GROUPPAGE", this.Instance.ipServer);
                 await Navigation.PushAsync(new GroupPage(this.Instance, group, this.Id_Price));
             }
         }
