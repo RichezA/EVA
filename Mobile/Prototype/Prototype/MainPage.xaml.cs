@@ -24,6 +24,7 @@ namespace Prototype
         private TcpListener tcpListener;
         private Thread listenThread;
         public bool voteOk = false;
+        public bool usedID = false;
         public IPAddress myIpv4;
         public string User;
         public string ipServer = "192.168.43.171";
@@ -49,8 +50,8 @@ namespace Prototype
         public MainPage()
 		{
             IPAddress[] ipv4Addresses = Array.FindAll(
-                Dns.GetHostEntry(string.Empty).AddressList,
-                a => a.AddressFamily == AddressFamily.InterNetwork);
+                                        Dns.GetHostEntry(string.Empty).AddressList,
+                                        a => a.AddressFamily == AddressFamily.InterNetwork);
             this.myIpv4 = ipv4Addresses[0].MapToIPv4();
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
@@ -109,6 +110,10 @@ namespace Prototype
                 //this.groups.CopyTo(this.copyGroup);
 
                 this.copyGroup = new List<Group>(this.groups); //BETTER COPY
+            }
+            if(this.usedID)
+            {
+                await DisplayAlert("Erreur", "Vous avez déjà voté", "OK");
             }
             /*if (!String.IsNullOrEmpty(LogEntry.Text) && !String.IsNullOrEmpty(PasswordEntry.Text))
             {
@@ -218,6 +223,11 @@ namespace Prototype
                     this.voteOk = false;
                     clientStream.Flush();
                     //this.checkingVote.Start();
+                }
+                if(encoder.GetString(message,0,bytesRead) == "REGISTERED")
+                {
+                    this.usedID = true;
+                    clientStream.Flush();
                 }
 
             }

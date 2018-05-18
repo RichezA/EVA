@@ -22,6 +22,7 @@ namespace monitotest
         private TcpListener tcpListener;
         private Thread listenThread;
         List<string> address = new List<string>();
+        List<string> ticketNumber = new List<string>();
         string path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\EVA";
         int actualyear = DateTime.Now.Year;
         Dictionary<string, List<string>> votes;
@@ -75,9 +76,9 @@ namespace monitotest
 
         private void CollectVote()
         {
-            foreach(var element in this.votes)
+            foreach (var element in this.votes)
             {
-                if (!File.Exists(path + "\\" + actualyear + element.Key+".txt"))
+                if (!File.Exists(path + "\\" + actualyear + element.Key + ".txt"))
 
                 {
                     FileStream fs = File.Create(path + "\\" + actualyear + element.Key + ".txt");
@@ -85,10 +86,10 @@ namespace monitotest
                     fs.Dispose();
                 }
                 StreamWriter sw = new StreamWriter(path + "\\" + actualyear + element.Key + ".txt");
-                string[] teamVotes = new string[3] { "Meteor", "Bloodmoon","Infamy Studio" };
+                string[] teamVotes = new string[3] { "Meteor", "Bloodmoon", "Infamy Studio" };
                 for (int i = 0; i < teamVotes.Length; i++)
                 {
-                    foreach(var grpVotes in element.Value[i])
+                    foreach (var grpVotes in element.Value[i])
                     {
                         increment = (grpVotes.ToString() == teamVotes[i]) ? increment++ : increment += 0;
                     }
@@ -215,7 +216,16 @@ namespace monitotest
             switch (split[0])
             {
                 case "CHECKVOTE":
-                    Network.SendPacket("VOTEOK", split[1]);
+                    string incID = split[2];
+                    if (!ticketNumber.Contains(incID))
+                    {
+                        Network.SendPacket("VOTEOK", split[1]);
+                        ticketNumber.Add(split[2]);
+                    }
+                    else
+                    {
+                        Network.SendPacket("REGISTERED", split[1]);
+                    }
                     break;
                 case "PAGE":
                     this.SetText(split[2], this.textBox2);
