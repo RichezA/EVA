@@ -49,8 +49,8 @@ namespace Prototype
         public MainPage()
 		{
             IPAddress[] ipv4Addresses = Array.FindAll(
-                Dns.GetHostEntry(string.Empty).AddressList,
-                a => a.AddressFamily == AddressFamily.InterNetwork);
+                                        Dns.GetHostEntry(string.Empty).AddressList,
+                                        a => a.AddressFamily == AddressFamily.InterNetwork);
             this.myIpv4 = ipv4Addresses[0].MapToIPv4();
             InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
