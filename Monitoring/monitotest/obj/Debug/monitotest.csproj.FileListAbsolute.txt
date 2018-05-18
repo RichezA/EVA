@@ -28,3 +28,13 @@ G:\Monitoring\monitotest\obj\Debug\monitotest.csproj.GenerateResource.cache
 G:\Monitoring\monitotest\obj\Debug\monitotest.csproj.CoreCompileInputs.cache
 G:\Monitoring\monitotest\obj\Debug\monitotest.exe
 G:\Monitoring\monitotest\obj\Debug\monitotest.pdb
+C:\Users\riche\Desktop\BOC\AppBoc\Monitoring\monitotest\bin\Debug\monitotest.exe.config
+C:\Users\riche\Desktop\BOC\AppBoc\Monitoring\monitotest\bin\Debug\monitotest.exe
+C:\Users\riche\Desktop\BOC\AppBoc\Monitoring\monitotest\bin\Debug\monitotest.pdb
+C:\Users\riche\Desktop\BOC\AppBoc\Monitoring\monitotest\obj\Debug\monitotest.csprojResolveAssemblyReference.cache
+C:\Users\riche\Desktop\BOC\AppBoc\Monitoring\monitotest\obj\Debug\monitotest.Form1.resources
+C:\Users\riche\Desktop\BOC\AppBoc\Monitoring\monitotest\obj\Debug\monitotest.Properties.Resources.resources
+C:\Users\riche\Desktop\BOC\AppBoc\Monitoring\monitotest\obj\Debug\monitotest.csproj.GenerateResource.cache
+C:\Users\riche\Desktop\BOC\AppBoc\Monitoring\monitotest\obj\Debug\monitotest.csproj.CoreCompileInputs.cache
+C:\Users\riche\Desktop\BOC\AppBoc\Monitoring\monitotest\obj\Debug\monitotest.exe
+C:\Users\riche\Desktop\BOC\AppBoc\Monitoring\monitotest\obj\Debug\monitotest.pdb

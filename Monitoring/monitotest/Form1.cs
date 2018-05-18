@@ -22,17 +22,10 @@ namespace monitotest
         private TcpListener tcpListener;
         private Thread listenThread;
         List<string> adress = new List<string>();
-        int cpt = 0;
         string path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\EVA";
         int actualyear = DateTime.Now.Year;
         Dictionary<string, List<string>> votes;
-
-        #region testvariables
-        int meteorVotes = 0;
-        int bloodmoonVotes = 0;
-        int infamyVotes = 0;
         int increment = 0;
-        #endregion
 
         public Form1()
         {
@@ -41,10 +34,15 @@ namespace monitotest
             {
                 Directory.CreateDirectory(path);
             }
+            this.textBox1.AutoSize = true;
+            this.textBox2.AutoSize = true;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            this.button1.Enabled = true;
+            this.button2.Enabled = false;
+
             try
             {
                 foreach (string element in this.adress)
@@ -87,39 +85,18 @@ namespace monitotest
                     fs.Dispose();
                 }
                 StreamWriter sw = new StreamWriter(path + "\\" + actualyear + element.Key + ".txt");
-                //string[] teamVotes = new string[3] { "Meteor", "Bloodmoon","Infamy Studio" };
-                //for (int i = 0; i < teamVotes.Length; i++)
-                //{
-                //    foreach(var grpVotes in element.Value[i])
-                //    {
-                //        increment = (grpVotes.ToString() == teamVotes[i]) ? increment++ : increment += 0;
-                //    }
-                //    sw.Write(String.Join(Environment.NewLine, $"{teamVotes[i]} : {increment}"));
-                //    increment = 0;
-                //}
-
-                Dictionary<string, int> votes = new Dictionary<string, int>();
-                foreach (string item in element.Value)
+                string[] teamVotes = new string[3] { "Meteor", "Bloodmoon","Infamy Studio" };
+                for (int i = 0; i < teamVotes.Length; i++)
                 {
-                    if (!votes.ContainsKey(item))
+                    foreach(var grpVotes in element.Value[i])
                     {
-                        votes.Add(item, 1);
+                        increment = (grpVotes.ToString() == teamVotes[i]) ? increment++ : increment += 0;
                     }
-                    else
-                    {
-                        int count = 0;
-                        votes.TryGetValue(item, out count);
-                        votes.Remove(item);
-                        votes.Add(item, count + 1);
-                    }
+                    sw.Write(String.Join(Environment.NewLine, $"{teamVotes[i]} : {increment}"));
+                    increment = 0;
                 }
 
-                foreach(KeyValuePair<string, int> entry in votes)
-                {
-                    sw.WriteLine(entry.Key + ": " + entry.Value);
-                }
-                
-
+                #region test
                 //switch (element.Value.ToString())
                 //{
                 //    case "Meteor":
@@ -132,6 +109,7 @@ namespace monitotest
                 //        sw.Write(String.Join(Environment.NewLine, "BloodMoon : " + increment));
                 //        break;
                 //}
+                #endregion
                 //sw.Write(string.Join(Environment.NewLine, element.Value));
                 sw.Close();
                 sw.Dispose();
@@ -140,6 +118,8 @@ namespace monitotest
 
         private void button1_Click(object sender, EventArgs e)
         {
+            this.button1.Enabled = false;
+            this.button2.Enabled = true;
             this.votes = new Dictionary<string, List<string>>()
             {
                     {"Prix1", new List<string>()},
@@ -238,39 +218,11 @@ namespace monitotest
                     Network.SendPacket("VOTEOK", split[1]);
                     break;
                 case "PAGE":
-                    switch (split[1])
-                    {
-                        case "1":
-                            this.SetText(split[3], this.textBox2);
-                            break;
-                        case "2":
-                            this.SetText(split[3], this.textBox4);
-                            break;
-                        case "3":
-                            this.SetText(split[3], this.textBox6);
-                            break;
-                        case "4":
-                            this.SetText(split[3], this.textBox8);
-                            break;
-                    }
+                    this.SetText(split[2], this.textBox2);
                     break;
                 case "CONNEXION":
-                    switch (split[1])
-                    {
-                        case "1":
-                            this.SetText(split[3], this.textBox1);
-                            break;
-                        case "2":
-                            this.SetText(split[3], this.textBox3);
-                            break;
-                        case "3":
-                            this.SetText(split[3], this.textBox5);
-                            break;
-                        case "4":
-                            this.SetText(split[3], this.textBox7);
-                            break;
-                    }
-                    this.SetText(split[3] + " s'est connecté", this.textBox9);
+                    this.SetText(split[2], this.textBox1);
+                    this.SetText(split[2] + " s'est connecté", this.textBox9);
                     break;
                 case "VOTE1":
                     this.SetText(split[2] + " a voté pour le prix 1", textBox9);
@@ -334,7 +286,8 @@ namespace monitotest
         }
         private void textBox9_TextChanged_1(object sender, EventArgs e)
         {
-
+            textBox9.SelectionStart = textBox9.Text.Length;
+            textBox9.ScrollToCaret();
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
