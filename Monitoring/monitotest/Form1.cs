@@ -21,7 +21,7 @@ namespace monitotest
         public TcpClient client;
         private TcpListener tcpListener;
         private Thread listenThread;
-        List<string> adress = new List<string>();
+        List<string> address = new List<string>();
         string path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\EVA";
         int actualyear = DateTime.Now.Year;
         Dictionary<string, List<string>> votes;
@@ -45,7 +45,7 @@ namespace monitotest
 
             try
             {
-                foreach (string element in this.adress)
+                foreach (string element in this.address)
                 {
                     Network.SendPacket("VOTEOFF", element);
                 }
@@ -210,7 +210,7 @@ namespace monitotest
         private void TreatText(string message)
         {
             var split = message.Split(':');
-            if (!this.adress.Contains(split[1])) this.adress.Add(split[1]);
+            if (!this.address.Contains(split[1])) this.address.Add(split[1]);
             //var increment = this.votes.Exists(x => x == split[3]) ? increment++ : increment += 0;
             switch (split[0])
             {
