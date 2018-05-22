@@ -23,6 +23,7 @@ namespace monitotest
         private Thread listenThread;
         List<string> address = new List<string>();
         List<string> ticketNumber = new List<string>();
+        List<string> ticketVoted = new List<string>();
         string path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\EVA";
         int actualyear = DateTime.Now.Year;
         Dictionary<string, List<string>> votes;
@@ -37,6 +38,17 @@ namespace monitotest
             }
             this.textBox1.AutoSize = true;
             this.textBox2.AutoSize = true;
+            Task.Factory.StartNew(() => this.LoadUsers());
+        }
+
+        private void LoadUsers()
+        {
+            StreamReader sr = new StreamReader(this.path + "\\" + actualyear + "ticket.txt");
+            string line;
+            while((line = sr.ReadLine()) != null)
+            {
+                ticketNumber.Add(line);
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -86,17 +98,25 @@ namespace monitotest
                     fs.Dispose();
                 }
                 StreamWriter sw = new StreamWriter(path + "\\" + actualyear + element.Key + ".txt");
-                string[] teamVotes = new string[3] { "Meteor", "Bloodmoon", "Infamy Studio" };
-                for (int i = 0; i < teamVotes.Length; i++)
+                Dictionary<string, int> votes = new Dictionary<string, int>();
+                foreach (string item in element.Value)
                 {
-                    foreach (var grpVotes in element.Value[i])
+                    if (!votes.ContainsKey(item))
                     {
-                        increment = (grpVotes.ToString() == teamVotes[i]) ? increment++ : increment += 0;
+                        votes.Add(item, 1);
                     }
-                    sw.Write(String.Join(Environment.NewLine, $"{teamVotes[i]} : {increment}"));
-                    increment = 0;
+                    else
+                    {
+                        int count = 0;
+                        votes.TryGetValue(item, out count);
+                        votes.Remove(item);
+                        votes.Add(item, count + 1);
+                    }
                 }
-
+                foreach (KeyValuePair<string, int> entry in votes)
+                {
+                    sw.WriteLine(entry.Key + ": " + entry.Value);
+                }
                 #region test
                 //switch (element.Value.ToString())
                 //{
@@ -191,14 +211,15 @@ namespace monitotest
                         //the client has disconnected from the server
                         break;
                     }
-                    if (encoder.GetString(message, 0, bytesRead) == "CHECKVOTE")
-                    {
-                        clientStream.Write(encoder.GetBytes("VOTEOK"), 0, encoder.GetBytes("VOTEOK").Length);
-                        clientStream.Flush();
-                    }
+                    //if (encoder.GetString(message, 0, bytesRead) == "CHECKVOTE")
+                    //{
+                    //    clientStream.Write(encoder.GetBytes("VOTEOK"), 0, encoder.GetBytes("VOTEOK").Length);
+                    //    clientStream.Flush();
+                    //}
                     else
                     {
                         this.TreatText(encoder.GetString(message, 0, bytesRead));
+                        clientStream.Flush();
                     }
                     //File.WriteAllText("Log.txt", textBox9.Text);
 
@@ -216,23 +237,65 @@ namespace monitotest
             switch (split[0])
             {
                 case "CHECKVOTE":
-                    string incID = split[2];
-                    if (!ticketNumber.Contains(incID))
+                    //string incID = split[2];
+                    //if (!ticketNumber.Contains(incID))
+                    //{
+                    Network.SendPacket("VOTEOK", split[1]);
+                    //    ticketNumber.Add(split[2]);
+                    //}
+                    //else
+                    //{
+                    //    Network.SendPacket("REGISTERED", split[1]);
+                    //}
+                    break;
+                case "CHECKUSER":
+                    if(split[2] == "66568539816433") //INVITE
                     {
-                        Network.SendPacket("VOTEOK", split[1]);
-                        ticketNumber.Add(split[2]);
+                        Network.SendPacket("USEROK", split[1]);
                     }
-                    else
+                    if (ticketNumber.Contains(split[2]))
                     {
-                        Network.SendPacket("REGISTERED", split[1]);
+                        if (!ticketVoted.Contains(split[2]))
+                        {
+                            Network.SendPacket("USEROK", split[1]);
+                            ticketVoted.Add(split[2]);
+                        }
                     }
                     break;
                 case "PAGE":
-                    this.SetText(split[2], this.textBox2);
+                    switch (split[1])
+                    {
+                        case "1":
+                            this.SetText(split[3], this.textBox2);
+                            break;
+                        case "2":
+                            this.SetText(split[3], this.textBox4);
+                            break;
+                        case "3":
+                            this.SetText(split[3], this.textBox6);
+                            break;
+                        case "4":
+                            this.SetText(split[3], this.textBox8);
+                        break;
+                    }
                     break;
                 case "CONNEXION":
-                    this.SetText(split[2], this.textBox1);
-                    this.SetText(split[2] + " s'est connecté", this.textBox9);
+                    switch (split[1])
+                    {
+                        case "1":
+                            this.SetText(split[3], this.textBox1);
+                            break;
+                        case "2":
+                            this.SetText(split[3], this.textBox3);
+                            break;
+                        case "3":
+                            this.SetText(split[3], this.textBox5);
+                            break;
+                        case "4":
+                            this.SetText(split[3], this.textBox7);
+                            break;
+                    }
+                    this.SetText(split[3] + " s'est connecté", this.textBox9);
                     break;
                 case "VOTE1":
                     this.SetText(split[2] + " a voté pour le prix 1", textBox9);
