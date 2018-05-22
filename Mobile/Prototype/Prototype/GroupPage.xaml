@@ -13,14 +13,21 @@
             <StackLayout VerticalOptions="Center"
                          Margin="20">
                 <Image x:Name="Image"
-                       HeightRequest="100"
-                       WidthRequest="100"
+                       HeightRequest="250"
+                       WidthRequest="250"
                        Margin="10, 0, 5, 0"/>
             </StackLayout>
             <StackLayout VerticalOptions="End">
                 <Label x:Name="Desc"
                        HorizontalOptions="Center"
+                       Margin="10, 10"
                        FontSize="28"/>
+                <Label HorizontalOptions="Center"
+                       FontAttributes="Bold"
+                       Text="Developpeur(s):"/>
+                <Label x:Name="Devs"
+                       HorizontalOptions="Center"
+                       FontSize="16"/>
                 <Button x:Name="VoteButton"
                         Clicked="Vote_Clicked"
                         Margin="100, 10"

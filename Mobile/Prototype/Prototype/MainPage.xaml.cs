@@ -28,7 +28,7 @@ namespace Prototype
         public IPAddress myIpv4;
         public string User;
         public string ipServer = "192.168.43.171";
-        public string Number = "1";
+        public string Number = "3";
         public Thread checkingVote;
         public List<Group> copyGroup;
 

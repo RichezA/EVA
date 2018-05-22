@@ -27,7 +27,6 @@ namespace monitotest
         string path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\EVA";
         int actualyear = DateTime.Now.Year;
         Dictionary<string, List<string>> votes;
-        int increment = 0;
 
         public Form1()
         {
@@ -368,5 +367,6 @@ namespace monitotest
 
         }
         #endregion
+        
     }
 }

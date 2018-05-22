@@ -1,0 +1,9 @@
+C:\Users\remyv\source\repos\AppBoc\Monitoring\monitotest\bin\Release\monitotest.exe.config
+C:\Users\remyv\source\repos\AppBoc\Monitoring\monitotest\bin\Release\monitotest.exe
+C:\Users\remyv\source\repos\AppBoc\Monitoring\monitotest\bin\Release\monitotest.pdb
+C:\Users\remyv\source\repos\AppBoc\Monitoring\monitotest\obj\Release\monitotest.Form1.resources
+C:\Users\remyv\source\repos\AppBoc\Monitoring\monitotest\obj\Release\monitotest.Properties.Resources.resources
+C:\Users\remyv\source\repos\AppBoc\Monitoring\monitotest\obj\Release\monitotest.csproj.GenerateResource.cache
+C:\Users\remyv\source\repos\AppBoc\Monitoring\monitotest\obj\Release\monitotest.csproj.CoreCompileInputs.cache
+C:\Users\remyv\source\repos\AppBoc\Monitoring\monitotest\obj\Release\monitotest.exe
+C:\Users\remyv\source\repos\AppBoc\Monitoring\monitotest\obj\Release\monitotest.pdb

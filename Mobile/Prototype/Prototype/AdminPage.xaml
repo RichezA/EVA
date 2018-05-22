@@ -11,7 +11,7 @@
                    FontSize="Default"/>
             <Entry x:Name="AdressEntry"/>
             <Label HorizontalOptions="Center"
-                   Text="ANNEE"
+                   Text="NUMERO APPAREIL"
                    FontSize="Default"/>
             <Entry x:Name="YearEntry"/>
             <!--<Label HorizontalOptions="Center"

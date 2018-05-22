@@ -25,13 +25,14 @@ namespace Prototype
             this.group = group;
             VoteButton.Text = this.Instance.lang.GetLanguageResult("VoteButton");
             this.Group.Text = group.Nom;  //Label Group
-            this.Image.Source = group.Image; //Image
+            this.Image.Source = group.ImageJeu; //Image
             this.Desc.Text = group.Description; //Description
+            this.Devs.Text = group.Devs;
         }
 
         protected override bool OnBackButtonPressed()
         {
-            Network.SendPacket("PAGE:" + this.Instance.Number + ":" + this.Instance.myIpv4 + ":???PAGE", this.Instance.ipServer);
+            Network.SendPacket("PAGE:" + this.Instance.Number + ":" + this.Instance.myIpv4 + ":LISTPAGE"+this.Id_Price, this.Instance.ipServer);
             Navigation.PopAsync();
             return true;
         }
@@ -70,7 +71,6 @@ namespace Prototype
                         this.Instance.copyGroup.Remove(this.group);
                         await Network.SendPacket("PAGE:" + this.Instance.Number + ":" + this.Instance.myIpv4 + ":LISTPAGE5", this.Instance.ipServer);
                         await Network.SendPacket("VOTE5:" + this.Instance.myIpv4 + ":" + this.Instance.User + ":" + this.group.Studio, this.Instance.ipServer);
-                        await Network.SendPacket("CONNEXION:" + this.Instance.Number + ":" + this.Instance.myIpv4 + ": ", this.Instance.ipServer);
                         await Navigation.PopToRootAsync();
                         break;
                 }

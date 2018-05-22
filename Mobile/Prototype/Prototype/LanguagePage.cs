@@ -16,7 +16,7 @@ namespace Prototype
             List<Language> langs = new List<Language>
             {
                 new Language{Name = "Français", ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Flag_of_France.svg/225px-Flag_of_France.svg.png", Short = "fr"},
-                new Language{Name = "English", ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Flag_of_Great_Britain_%281707-1800%29.svg/2000px-Flag_of_Great_Britain_%281707-1800%29.svg.png", Short = "en"},
+                new Language{Name = "English", ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Flag_of_the_United_Kingdom.svg/225px-Flag_of_the_United_Kingdom.svg.png", Short = "en"},
                 new Language{Name = "Italiano", ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Flag_of_Italy.svg/225px-Flag_of_Italy.svg.png", Short = "it"}
             };
             ListView listView = new ListView

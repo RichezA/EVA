@@ -22,6 +22,7 @@ namespace Prototype
         {
             this.Instance = main;
             this.Id_Price = Id_Price;
+            NavigationPage.SetHasBackButton(this, false);
             //InitializeComponent();
             switch (Id_Price)
             {
@@ -69,7 +70,7 @@ namespace Prototype
                         HeightRequest = 80,
                         WidthRequest = 80
                     };
-                    imageCell.SetBinding(Image.SourceProperty, "Miniature");
+                    imageCell.SetBinding(Image.SourceProperty, "ImageStudio");
                     /*imageCell.SetBinding(Image.MarginProperty, "10, 0, 5, 0");
                     imageCell.SetBinding(Image.HeightRequestProperty, "")*/
 

@@ -16,17 +16,25 @@ namespace Prototype.Services
         public string Studio { get; set; }
         public string Type { get; set; }
         public string TypeDeJeux { get; set; }
-        public string ListeDevelopper { get; set; }
+        public string ListeDeveloppeur { get; set; }
+        public string Devs
+        {
+            get
+            {
+                return this.ListeDeveloppeur.Replace(", ", Environment.NewLine);
+            }
+        }
         public string UrlDownload { get; set; }
         public string UrlImage { get; set; }
-        public ImageSource Image
+        public string UrlStudio { get; set; }
+        public ImageSource ImageJeu
         {
             get
             {
                 ImageSource res = null;
                 using (var webClient = new HttpClient(new NativeMessageHandler()))
                 {
-                    var imageBytes = webClient.GetByteArrayAsync(this.UrlImage).Result;
+                    var imageBytes = webClient.GetByteArrayAsync(this.UrlMiniature).Result;
                     if (imageBytes != null && imageBytes.Length > 0)
                     {
                         res = ImageSource.FromStream(() => new MemoryStream(imageBytes));
@@ -37,14 +45,14 @@ namespace Prototype.Services
             }
         }
         public string UrlMiniature { get; set; }
-        public ImageSource Miniature
+        public ImageSource ImageStudio
         {
             get
             {
                 ImageSource res = null;
                 using (var webClient = new HttpClient(new NativeMessageHandler()))
                 {
-                    var imageBytes = webClient.GetByteArrayAsync(this.UrlMiniature).Result;
+                    var imageBytes = webClient.GetByteArrayAsync(this.UrlStudio).Result;
                     if (imageBytes != null && imageBytes.Length > 0)
                     {
                         res = ImageSource.FromStream(() => new MemoryStream(imageBytes));
