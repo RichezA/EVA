@@ -25,7 +25,7 @@ namespace Prototype
             this.group = group;
             VoteButton.Text = this.Instance.lang.GetLanguageResult("VoteButton");
             this.Group.Text = group.Nom;  //Label Group
-            this.Image.Source = group.ImageJeu; //Image
+            this.Image.Source = group.UrlMiniature; //Image
             this.Desc.Text = group.Description; //Description
             this.Devs.Text = group.Devs;
         }

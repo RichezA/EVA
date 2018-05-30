@@ -70,7 +70,7 @@ namespace Prototype
                         HeightRequest = 80,
                         WidthRequest = 80
                     };
-                    imageCell.SetBinding(Image.SourceProperty, "ImageStudio");
+                    imageCell.SetBinding(Image.SourceProperty, "UrlStudio");
                     /*imageCell.SetBinding(Image.MarginProperty, "10, 0, 5, 0");
                     imageCell.SetBinding(Image.HeightRequestProperty, "")*/
 
